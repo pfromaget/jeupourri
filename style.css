@@ -1,0 +1,28 @@
+body {
+	margin:0px;
+}
+
+.grid {
+	background: black;
+	width: 600px;
+	height: 600px;
+	border-collapse: collapse;
+}
+
+.grid tr {
+	border:1px solid white;
+}
+
+.grid td {
+	border:1px solid white;
+}
+
+#player {
+	background:url("http://findicons.com/files/icons/814/very_emotional/128/geek.png") ;
+	background-size:40px 40px;
+	width:40px;
+	height:40px;
+	position:absolute;
+	top: 10px;
+	left: 10px;
+}

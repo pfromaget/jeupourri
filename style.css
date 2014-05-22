@@ -1,28 +1,41 @@
 body {
 	margin:0px;
+	background: url("bg.jpg");
 }
 
 .grid {
-	background: black;
+	background: #111111;
 	width: 600px;
 	height: 600px;
 	border-collapse: collapse;
+	position: relative;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 100px;
 }
 
 .grid tr {
-	border:1px solid white;
+	border:1px solid #0af4fd;
 }
 
 .grid td {
-	border:1px solid white;
+	border:1px solid #0af4fd;
 }
 
 #player {
-	background:url("http://findicons.com/files/icons/814/very_emotional/128/geek.png") ;
-	background-size:40px 40px;
-	width:40px;
-	height:40px;
+	background:url("player.png") ;
+	background-size:60px auto;
+	width:60px;
+	height:60px;
 	position:absolute;
-	top: 10px;
-	left: 10px;
+	top: 100px;
+	display: none;
+}
+
+.beer {
+	background:url("beer.png") ;
+	background-size:60px auto;
+	width:60px;
+	height:60px;
+	position:absolute;
 }

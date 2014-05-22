@@ -14,12 +14,13 @@ $hauteur = 10;
 		<script type="text/javascript" src="js.js"></script>
 		<script type="text/javascript" src="http://static6.spartoo.com/js/jquery.min.js"></script>
 	</head>
-	<body onkeypress="move_player(<?=$largeur?>,<?=$hauteur?>);">
+	<body onkeydown="move_player(<?=$largeur?>,<?=$hauteur?>);event.preventDefault();" onload="loop();">
+	<div id="content">
 	<?php
 
 
 	echo '
-	<table class="grid">';
+	<table class="grid" id="grid">';
 
 	for($i=0;$i<$hauteur;$i++) {
 		
@@ -42,5 +43,6 @@ $hauteur = 10;
 	<div id="player"></div>';
 
 	?>
+	</div>
 	</body>
 </html>

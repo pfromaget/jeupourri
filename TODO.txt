@@ -1,3 +1,11 @@
+Bugs :
+
+- bug nico sortie de la grille (résolution je pense)
+- qualité arrière plan fille
+
+
+Fonctions :
+
 - Moyen de faire baisser l'alcoolémie
 - Faire apparaitre des patrons en costard aléatoirement qui bougent
 - Plus de bières à la fois ?

@@ -52,12 +52,12 @@ body {
 	color:white;
 	text-align:center;
 	font-size:30px;
-	width: 120px;
-	height: 50px;
-	z-index: 100;
-	position: absolute;
-	left: 45%;
-	top: 0;
+}
+
+#alcool {
+	color:white;
+	text-align:center;
+	font-size:30px;
 }
 
 #leftpanel {
@@ -66,4 +66,14 @@ body {
 	width:200px;
 	height: 600px;
 	position: absolute;
+}
+
+.choose_player {
+	cursor: pointer;
+	border: 1px solid rgba(0, 0, 0, 0);
+}
+
+.choose_player:hover{
+	cursor: pointer;
+	border: 1px dashed white;
 }

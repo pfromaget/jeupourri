@@ -20,12 +20,22 @@ $hauteur = 10;
 
 
 	echo '
-	<div id="score"></div>
+	
 	<div id="leftpanel">
-		<b>Sélection du joueur :</b>
-		<br>
-		<img src="player.png" width="60px" onclick="change_player(1);">
-		<img src="player_girl.png" width="60px" onclick="change_player(2);">
+		<div>
+			<b>Score :</b>
+			<div id="score">0</div>
+		</div>
+		<div>
+			<b>Alcoolémie :</b>
+			<div id="alcool">0</div>
+		</div>
+		<div>
+			<b>Sélection du geek :</b>
+			<br>
+			<img src="player.png" width="60px" onclick="change_player(1);" class="choose_player">&nbsp;
+			<img src="player_girl.png" width="60px" onclick="change_player(2);" class="choose_player">
+		</div>
 	</div>
 	<div id="divgrid">
 	<table class="grid" id="grid">';

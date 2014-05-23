@@ -1,3 +1,4 @@
+sessionStorage.setItem("alcool",0);
 sessionStorage.setItem("score",0);
 
 function move_player(largeur,hauteur,e) {
@@ -12,7 +13,28 @@ function move_player(largeur,hauteur,e) {
 		var left = parseInt($('#player').css("left"));
 		var top = parseInt($('#player').css("top"));
 		
-		switch(event.keyCode) {
+		var key = event.keyCode;
+		
+		//très alcoolisé
+		if(parseFloat(sessionStorage.getItem("alcool"))>5) {
+			var rand = Math.floor(Math.random()*10)+1;
+			if(rand==5 || rand==7) return 0; //rien
+			else if(rand<5) { //deplacement aleatoire 5 fois sur 10
+				key = rand+37;
+			}
+		}
+		
+		//alcoolisé
+		else if(parseFloat(sessionStorage.getItem("alcool"))>3) {
+			var rand = Math.floor(Math.random()*10)+1;
+			if(rand==5) return 0; //rien
+			else if(rand<2) { //deplacement aleatoire 2 fois sur 10
+				key = rand+37;
+			}
+		}
+		
+		//déplacement
+		switch(key) {
 			case 37:
 			case 52: //gauche pave num	
 				if(left-60>=0+tableleft) {
@@ -78,9 +100,17 @@ function moreboss() {
 
 }
 
+function updateAlcool(value) {
+	
+	sessionStorage.setItem("alcool",parseFloat(parseFloat(sessionStorage.getItem("alcool"))+value));
+	$("#alcool").html(Math.round(sessionStorage.getItem("alcool")*10)/10+'g');
+	
+}
+
+
 function updateScore(value) {
 	
-	sessionStorage.setItem("score",parseInt(sessionStorage.getItem("score"))+value);
+	sessionStorage.setItem("score",parseFloat(sessionStorage.getItem("score"))+value);
 	$("#score").html(sessionStorage.getItem("score"));
 	
 }
@@ -96,6 +126,7 @@ function checkcollision() {
 		var beertop = parseInt($(beers[i]).css("top"));
 		if(beerleft==left && beertop==top) {
 			$(beers[i]).remove();
+			updateAlcool(0.2);
 			updateScore(1);
 		}
 	}

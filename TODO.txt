@@ -1,0 +1,9 @@
+- Moyen de faire baisser l'alcoolémie
+- Faire apparaitre des patrons en costard aléatoirement qui bougent
+- Plus de bières à la fois ?
+- Changement de couleur du perso quand l'alcoolémie augmente ?
+- Faire apparaitre des flics aléatoirement qui bougent
+- Collision avec patron = -5 en score si alcool > 5
+- Collision avec flic = perdu si alcool > 5
+- Moyen de faire baisser l'alcoolémie doit rester affiché sur 15 touches max et ne se déplace pas
+- Faire apparaitre un bout de code pour bonus (a voir quoi) => si on a un bout de code dans l'inventaire le patron ne fait rien ?

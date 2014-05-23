@@ -1,19 +1,18 @@
+sessionStorage.setItem("score",0);
 
-function move_player(largeur,hauteur) {
-	
-	//TODO: preventDefault (uilliam cherche)
-	//TODO: faire marcher sur firefox
+function move_player(largeur,hauteur,e) {
 		
-	if (window.event) {
+	var event = e || window.event;
+		
+	if (event) {
 		
 		var tabletop = 100;
 		var tableleft = $('#grid').offset().left;
-		
+				
 		var left = parseInt($('#player').css("left"));
 		var top = parseInt($('#player').css("top"));
 		
-		
-		switch(window.event.keyCode) {
+		switch(event.keyCode) {
 			case 37:
 			case 52: //gauche pave num	
 				if(left-60>=0+tableleft) {
@@ -42,6 +41,9 @@ function move_player(largeur,hauteur) {
 				break;
 		}
 	}
+	
+	
+	checkcollision();
 }
 
 function init_player() {
@@ -62,9 +64,11 @@ function morebeer() {
 		var y=Math.floor((Math.random() * 9) + 1);;
 		var newbeer = document.createElement('div');
 		$(newbeer).addClass("beer");
+		$(newbeer).attr("name", "beer");
 		$(newbeer).css("left", tableleft+x*60 );
 		$(newbeer).css("top", tabletop+y*60 );
 		$(newbeer).appendTo($("#content"));
+		checkcollision();
 		
 	}
 		
@@ -72,6 +76,31 @@ function morebeer() {
 
 function moreboss() {
 
+}
+
+function updateScore(value) {
+	
+	sessionStorage.setItem("score",parseInt(sessionStorage.getItem("score"))+value);
+	$("#score").html(sessionStorage.getItem("score"));
+	
+}
+
+function checkcollision() {
+	
+	//biere ?
+	var left = parseInt($('#player').css("left"));
+	var top = parseInt($('#player').css("top"));
+	var beers = $('[name="beer"]');
+	for(i=0;i<beers.length;i++) {
+		var beerleft = parseInt($(beers[i]).css("left"));
+		var beertop = parseInt($(beers[i]).css("top"));
+		if(beerleft==left && beertop==top) {
+			$(beers[i]).remove();
+			updateScore(1);
+		}
+	}
+	
+	
 }
 
 function loop() {
@@ -83,5 +112,26 @@ function loop() {
 	morebeer();
 	moreboss();
 	
-	setTimeout(function(){loop()},50000);
+	setTimeout(function(){loop()},100);
+}
+
+function change_player(player) {
+	
+	switch(player) {
+		case 1:
+			$("body").css("background",'url("bg.jpg")');
+			$("#player").css("background",'url("player.png")');
+			$("#player").css("background-size",'60px auto');
+			$(".grid td").css("border-color",' #0af4fd');
+			$(".grid tr").css("border-color",' #0af4fd');
+			break;
+		case 2:
+			$("body").css("background",'url("bg_girl.jpg")');
+			$("#player").css("background",'url("player_girl.png")');
+			$("#player").css("background-size",'60px auto');
+			$(".grid td").css("border-color",' #fa0c5a');
+			$(".grid tr").css("border-color",' #fa0c5a');
+			break;
+	}
+	
 }

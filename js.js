@@ -160,8 +160,8 @@ function change_player(player) {
 			$("body").css("background",'url("bg_girl.jpg")');
 			$("#player").css("background",'url("player_girl.png")');
 			$("#player").css("background-size",'60px auto');
-			$(".grid td").css("border-color",' #fa0c5a');
-			$(".grid tr").css("border-color",' #fa0c5a');
+			$(".grid td").css("border-color",' #fb00f6');
+			$(".grid tr").css("border-color",' #fb00f6');
 			break;
 	}
 	

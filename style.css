@@ -48,6 +48,14 @@ body {
 	position:absolute;
 }
 
+.wc {
+	background:url("wc.png") ;
+	background-size:60px auto;
+	width:60px;
+	height:60px;
+	position:absolute;
+}
+
 #score {
 	color:white;
 	text-align:center;

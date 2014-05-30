@@ -1,5 +1,6 @@
 sessionStorage.setItem("alcool",0);
 sessionStorage.setItem("score",0);
+sessionStorage.setItem("code",0);
 sessionStorage.setItem("toilet_countdown",0);
 
 function move_player(largeur,hauteur,e) {
@@ -69,6 +70,7 @@ function move_player(largeur,hauteur,e) {
 	moretoilet();
 	morebeer();
 	moreboss();
+	morecode();
 	move_boss();
 	checkcollision();
 }
@@ -156,7 +158,7 @@ function morebeer() {
 function moreboss() {
 	
 	var boss = $('[name="boss"]');
-	if(boss.length==0 && parseFloat(sessionStorage.getItem("score"))>5 && Math.floor((Math.random() * 29) + 1) ) {
+	if(boss.length==0 && parseFloat(sessionStorage.getItem("score"))>5 && Math.floor((Math.random() * 29) + 1)==1 ) {
 	
 		var tabletop = 100;
 		var tableleft = $('#grid').offset().left;
@@ -166,6 +168,28 @@ function moreboss() {
 		var newboss = document.createElement('div');
 		$(newboss).addClass("boss");
 		$(newboss).attr("name", "boss");
+		$(newboss).css("left", tableleft+x*60 );
+		$(newboss).css("top", tabletop+y*60 );
+		$(newboss).appendTo($("#content"));
+		checkcollision();
+		
+	}
+
+}
+
+function morecode() {
+	
+	var code = $('[name="code"]');
+	if(Math.floor((Math.random() * 49) + 1)==1 ) {
+	
+		var tabletop = 100;
+		var tableleft = $('#grid').offset().left;
+		
+		var x=Math.floor((Math.random() * 9) + 1);
+		var y=Math.floor((Math.random() * 9) + 1);
+		var newboss = document.createElement('div');
+		$(newboss).addClass("code");
+		$(newboss).attr("name", "code");
 		$(newboss).css("left", tableleft+x*60 );
 		$(newboss).css("top", tabletop+y*60 );
 		$(newboss).appendTo($("#content"));
@@ -222,6 +246,13 @@ function updateAlcool(value) {
 	
 }
 
+function updateCode(value) {
+	
+	sessionStorage.setItem("code",parseFloat(parseFloat(sessionStorage.getItem("code"))+value));
+	$("#code").html(Math.round(sessionStorage.getItem("code")*10)/10);
+	
+}
+
 
 function updateScore(value) {
 	
@@ -270,7 +301,27 @@ function checkcollision() {
 		console.log(bossleft+"/"+left+"   "+bosstop+"/"+top);
 		if(bossleft==left && bosstop==top) {
 			$(boss[i]).remove();
-			updateScore(-2);
+			if(parseFloat(sessionStorage.getItem("code"))>0) {
+				//si pages codées, le boss en prend une
+				updateCode(-1);
+			}
+			else {
+				//pas de pages codées, le boss diminue le score
+				updateScore(-2);
+			}
+		}
+	}
+	
+	//code ?
+	var code = $('[name="code"]');
+	for(i=0;i<code.length;i++) {
+		var codeleft = parseInt($(code[i]).css("left"));
+		var codetop = parseInt($(code[i]).css("top"));
+		console.log(codeleft+"/"+left+"   "+codetop+"/"+top);
+		if(codeleft==left && codetop==top) {
+			$(code[i]).remove();
+			updateScore(1);
+			updateCode(1);
 		}
 	}
 	

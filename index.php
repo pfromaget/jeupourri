@@ -31,6 +31,10 @@ $hauteur = 10;
 			<div id="alcool">0</div>
 		</div>
 		<div>
+			<b>Pages de code :</b>
+			<div id="code">0</div>
+		</div>
+		<div>
 			<b>Sélection du geek :</b>
 			<br>
 			<img src="player.png" width="60px" onclick="change_player(1);" class="choose_player">&nbsp;

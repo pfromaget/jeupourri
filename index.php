@@ -36,6 +36,7 @@ $hauteur = 10;
 			<img src="player.png" width="60px" onclick="change_player(1);" class="choose_player">&nbsp;
 			<img src="player_girl.png" width="60px" onclick="change_player(2);" class="choose_player">
 		</div>
+		<div id="debug"></div>
 	</div>
 	<div id="divgrid">
 	<table class="grid" id="grid">';

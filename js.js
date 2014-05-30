@@ -66,8 +66,63 @@ function move_player(largeur,hauteur,e) {
 	}
 	
 	
-	checkcollision();
 	moretoilet();
+	morebeer();
+	moreboss();
+	move_boss();
+	checkcollision();
+}
+
+function move_boss() {
+	
+	//position joueur
+	var left = parseInt($('#player').css("left"));
+	var top = parseInt($('#player').css("top"));
+	
+	//position boss
+	var boss = $('[name="boss"]');
+	if(boss.length>0) {
+		
+		for(i=0;i<boss.length;i++) {
+			
+			var rand = Math.floor(Math.random()*10)+1;
+			//le boss bouge une fois sur deux
+			if(rand>5) {
+			
+				var bossleft = parseInt($(boss[i]).css("left"));
+				var bosstop = parseInt($(boss[i]).css("top"));
+				
+				var diffleft = bossleft-left;
+				var difftop = bosstop-top;
+				
+				//on deplace vers le joueur
+				if(Math.abs(diffleft)>Math.abs(difftop)) {
+					//on bouge left 
+					if(bossleft>left) {
+						//gauche
+						$(boss[i]).css("left",bossleft-60);
+					}
+					else {
+						//droite
+						$(boss[i]).css("left",bossleft+60);
+					}
+					
+				}
+				else {
+					//on bouge top
+					if(bosstop>top) {
+						//haut
+						$(boss[i]).css("top",bosstop-60);
+					}
+					else {
+						//bas
+						$(boss[i]).css("top",bosstop+60);
+					}
+				}
+			}
+		}
+	}
+	
 }
 
 function init_player() {
@@ -99,6 +154,24 @@ function morebeer() {
 }
 
 function moreboss() {
+	
+	var boss = $('[name="boss"]');
+	if(boss.length==0 && parseFloat(sessionStorage.getItem("score"))>5 && Math.floor((Math.random() * 29) + 1) ) {
+	
+		var tabletop = 100;
+		var tableleft = $('#grid').offset().left;
+		
+		var x=Math.floor((Math.random() * 9) + 1);
+		var y=Math.floor((Math.random() * 9) + 1);
+		var newboss = document.createElement('div');
+		$(newboss).addClass("boss");
+		$(newboss).attr("name", "boss");
+		$(newboss).css("left", tableleft+x*60 );
+		$(newboss).css("top", tabletop+y*60 );
+		$(newboss).appendTo($("#content"));
+		checkcollision();
+		
+	}
 
 }
 
@@ -189,6 +262,19 @@ function checkcollision() {
 		}
 	}
 	
+	//boss ?
+	var boss = $('[name="boss"]');
+	for(i=0;i<boss.length;i++) {
+		var bossleft = parseInt($(boss[i]).css("left"));
+		var bosstop = parseInt($(boss[i]).css("top"));
+		console.log(bossleft+"/"+left+"   "+bosstop+"/"+top);
+		if(bossleft==left && bosstop==top) {
+			$(boss[i]).remove();
+			updateScore(-2);
+		}
+	}
+	
+	
 	
 	
 }
@@ -197,12 +283,11 @@ function loop() {
 	
 	if($('#player').css("display")=="none") {
 		init_player();
+		morebeer();
 	}
 	
-	morebeer();
-	moreboss();
 	
-	setTimeout(function(){loop()},100);
+	setTimeout(function(){loop()},1000);
 }
 
 function change_player(player) {

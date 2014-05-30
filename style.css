@@ -48,6 +48,24 @@ body {
 	position:absolute;
 }
 
+
+.boss {
+	background:url("boss.png") ;
+	background-size:60px auto;
+	width:60px;
+	height:60px;
+	position:absolute;
+}
+
+
+.cops {
+	background:url("cops.gif") ;
+	background-size:60px auto;
+	width:60px;
+	height:60px;
+	position:absolute;
+}
+
 .wc {
 	background:url("wc.png") ;
 	background-size:60px auto;

@@ -1,6 +1,5 @@
 Bugs :
 
-- bug nico sortie de la grille (résolution je pense)
 - qualité arrière plan fille
 
 
@@ -14,6 +13,5 @@ Fonctions :
 - Message quand choper par le boss ?
 - Faire apparaitre des flics aléatoirement qui bougent (gif animé girophare ca serait fun)
 - Collision avec flic = perdu si alcool > 5
-- Faire apparaitre un bout de code pour bonus (a voir quoi) => si on a un bout de code dans l'inventaire le patron ne fait rien ?
 - Faire apparaitre des tasses de café = déplacement plus rapide (genre 2 fois dans la meme direction au lieu de un pendant 10 mouvements)
 - Peut etre mettre apparition des toilettes random sur la collision avec une biere plutot que sur déplacement joueur (car si on déplace dans le vide ca apparait)

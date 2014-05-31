@@ -60,7 +60,7 @@ body {
 
 .cops {
 	background:url("cops.gif") ;
-	background-size:60px auto;
+	background-size:60px 60px;
 	width:60px;
 	height:60px;
 	position:absolute;
@@ -89,6 +89,12 @@ body {
 }
 
 #alcool {
+	color:white;
+	text-align:center;
+	font-size:30px;
+}
+
+#code {
 	color:white;
 	text-align:center;
 	font-size:30px;

@@ -2,6 +2,7 @@ sessionStorage.setItem("alcool",0);
 sessionStorage.setItem("score",0);
 sessionStorage.setItem("code",0);
 sessionStorage.setItem("toilet_countdown",0);
+sessionStorage.setItem("cops_direction",0);
 
 function move_player(largeur,hauteur,e) {
 		
@@ -12,8 +13,8 @@ function move_player(largeur,hauteur,e) {
 		var tabletop = 100;
 		var tableleft = $('#grid').offset().left;
 				
-		var left = parseInt($('#player').css("left"));
-		var top = parseInt($('#player').css("top"));
+		var left = parseFloat($('#player').css("left"));
+		var top = parseFloat($('#player').css("top"));
 		
 		var key = event.keyCode;
 		
@@ -67,11 +68,16 @@ function move_player(largeur,hauteur,e) {
 	}
 	
 	
+	console.log(left+"   "+tableleft);
+	
+	
 	moretoilet();
 	morebeer();
 	moreboss();
 	morecode();
+	morecops();
 	move_boss();
+	move_cops();
 	checkcollision();
 }
 
@@ -127,6 +133,33 @@ function move_boss() {
 	
 }
 
+function move_cops() {
+	//les flics bougent en ligne droite
+	var tableleft = $('#grid').offset().left;
+	var cops = $('[name="cops"]');
+	if(cops.length>0) {		
+		for(i=0;i<cops.length;i++) {
+			var copsleft = parseFloat($(cops[i]).css("left"));
+			
+			if(parseInt(sessionStorage.getItem("cops_direction"))==0 && copsleft<tableleft+540) {
+				//droite
+				$(cops[i]).css("left",copsleft+60);
+			}
+			else if(copsleft>=tableleft+60) {
+				//gauche
+				sessionStorage.setItem("cops_direction",1);
+				$(cops[i]).css("left",copsleft-60);
+			}
+			else {
+				//droite
+				sessionStorage.setItem("cops_direction",0);
+				$(cops[i]).css("left",copsleft+60);				
+			}
+		}
+	}
+	
+}
+
 function init_player() {
 	var tableleft = $('#grid').offset().left;
 	$('#player').css("left", tableleft );
@@ -168,6 +201,28 @@ function moreboss() {
 		var newboss = document.createElement('div');
 		$(newboss).addClass("boss");
 		$(newboss).attr("name", "boss");
+		$(newboss).css("left", tableleft+x*60 );
+		$(newboss).css("top", tabletop+y*60 );
+		$(newboss).appendTo($("#content"));
+		checkcollision();
+		
+	}
+
+}
+
+function morecops() {
+	
+	var cops = $('[name="cops"]');
+	if(cops.length==0 && parseFloat(sessionStorage.getItem("alccol"))>3 && Math.floor((Math.random() * 29) + 1)==1 ) {
+	
+		var tabletop = 100;
+		var tableleft = $('#grid').offset().left;
+		
+		var x=Math.floor((Math.random() * 9) + 1);
+		var y=Math.floor((Math.random() * 9) + 1);
+		var newboss = document.createElement('div');
+		$(newboss).addClass("cops");
+		$(newboss).attr("name", "cops");
 		$(newboss).css("left", tableleft+x*60 );
 		$(newboss).css("top", tabletop+y*60 );
 		$(newboss).appendTo($("#content"));
@@ -264,14 +319,14 @@ function updateScore(value) {
 function checkcollision() {
 	
 	//position joueur
-	var left = parseInt($('#player').css("left"));
-	var top = parseInt($('#player').css("top"));
+	var left = parseFloat($('#player').css("left"));
+	var top = parseFloat($('#player').css("top"));
 	
 	//biere ?
 	var beers = $('[name="beer"]');
 	for(i=0;i<beers.length;i++) {
-		var beerleft = parseInt($(beers[i]).css("left"));
-		var beertop = parseInt($(beers[i]).css("top"));
+		var beerleft = parseFloat($(beers[i]).css("left"));
+		var beertop = parseFloat($(beers[i]).css("top"));
 		if(beerleft==left && beertop==top) {
 			$(beers[i]).remove();
 			updateAlcool(0.2);
@@ -282,8 +337,8 @@ function checkcollision() {
 	//toilettes ?
 	var toilets = $('[name="wc"]');
 	for(i=0;i<toilets.length;i++) {
-		var wcleft = parseInt($(toilets[i]).css("left"));
-		var wctop = parseInt($(toilets[i]).css("top"));
+		var wcleft = parseFloat($(toilets[i]).css("left"));
+		var wctop = parseFloat($(toilets[i]).css("top"));
 		if(wcleft==left && wctop==top) {
 			$(toilets[i]).remove();
 			if(parseFloat(sessionStorage.getItem("alcool"))>=2) {
@@ -296,9 +351,8 @@ function checkcollision() {
 	//boss ?
 	var boss = $('[name="boss"]');
 	for(i=0;i<boss.length;i++) {
-		var bossleft = parseInt($(boss[i]).css("left"));
-		var bosstop = parseInt($(boss[i]).css("top"));
-		console.log(bossleft+"/"+left+"   "+bosstop+"/"+top);
+		var bossleft = parseFloat($(boss[i]).css("left"));
+		var bosstop = parseFloat($(boss[i]).css("top"));
 		if(bossleft==left && bosstop==top) {
 			$(boss[i]).remove();
 			if(parseFloat(sessionStorage.getItem("code"))>0) {
@@ -315,8 +369,8 @@ function checkcollision() {
 	//code ?
 	var code = $('[name="code"]');
 	for(i=0;i<code.length;i++) {
-		var codeleft = parseInt($(code[i]).css("left"));
-		var codetop = parseInt($(code[i]).css("top"));
+		var codeleft = parseFloat($(code[i]).css("left"));
+		var codetop = parseFloat($(code[i]).css("top"));
 		console.log(codeleft+"/"+left+"   "+codetop+"/"+top);
 		if(codeleft==left && codetop==top) {
 			$(code[i]).remove();
@@ -326,6 +380,19 @@ function checkcollision() {
 	}
 	
 	
+	//cops ?
+	var cops = $('[name="cops"]');
+	for(i=0;i<cops.length;i++) {
+		var copsleft = parseFloat($(cops[i]).css("left"));
+		var copstop = parseFloat($(cops[i]).css("top"));
+		if(copsleft==left && copstop==top) {
+			$(cops[i]).remove();
+			if(parseFloat(sessionStorage.getItem("alcool"))>5) {
+				$('#player').remove();
+				alert("Vous avez perdu !");
+			}
+		}
+	}
 	
 	
 }

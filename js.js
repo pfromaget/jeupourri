@@ -6,6 +6,7 @@ sessionStorage.setItem("cops_direction",0);
 sessionStorage.setItem("message_timer",0);
 sessionStorage.setItem("coffee",0);
 sessionStorage.setItem("coffee_move",0);
+sessionStorage.setItem("player","boy");
 
 var cases = new Object();
 
@@ -82,14 +83,38 @@ function move_player(largeur,hauteur,e) {
 	}
 	
 	moretoilet();
-	morebeer();
 	moreboss();
 	morecode();
 	morecoffee();
 	morecops();
 	checkcollision();
+	changeface();
 }
 
+function changeface() {
+
+	if(sessionStorage.getItem("player")=="boy") {
+		if(sessionStorage.getItem("alcool")<3) {
+			$("#player").css("background",'url("player.png")');
+			$("#player").css("background-size",'60px auto');
+		}
+		else {
+			$("#player").css("background",'url("player2.png")');
+			$("#player").css("background-size",'60px auto');
+		}
+	}
+	else {
+		if(sessionStorage.getItem("alcool")<3) {
+			$("#player").css("background",'url("player_girl.png")');
+			$("#player").css("background-size",'60px auto');
+		}
+		else {
+			$("#player").css("background",'url("player_girl2.png")');
+			$("#player").css("background-size",'60px auto');
+		}
+	}
+
+}
 function move_boss() {
 	
 	//position joueur
@@ -284,7 +309,7 @@ function morecops() {
 function morecode() {
 	
 	var code = $('[name="code"]');
-	if(Math.floor((Math.random() * 49) + 1)==1 ) {
+	if(code.length<2 && Math.floor((Math.random() * 49) + 1)==1 ) {
 	
 		var tabletop = 100;
 		var tableleft = $('#grid').offset().left;
@@ -317,7 +342,7 @@ function morecode() {
 function morecoffee() {
 	
 	var coffee = $('[name="coffee"]');
-	if(Math.floor((Math.random() * 99) + 1)==1 ) {
+	if(coffee.length<2 && Math.floor((Math.random() * 99) + 1)==1 ) {
 	
 		var tabletop = 100;
 		var tableleft = $('#grid').offset().left;
@@ -444,6 +469,7 @@ function checkcollision() {
 			if(sessionStorage.getItem("coffee")>0) {
 				updateScore(1);
 			}
+			morebeer();
 		}
 	}
 	
@@ -511,7 +537,7 @@ function checkcollision() {
 		if(coffeeleft==left && coffeetop==top) {
 			$(coffee[i]).remove();
 			updateScore(1);
-			sessionStorage.setItem("coffee",10);
+			sessionStorage.setItem("coffee",30);
 			if(sessionStorage.getItem("coffee")>0) {
 				updateScore(1);
 			}
@@ -576,6 +602,7 @@ function change_player(player) {
 			$("#player").css("background-size",'60px auto');
 			$(".grid td").css("border-color",' #0af4fd');
 			$(".grid tr").css("border-color",' #0af4fd');
+			sessionStorage.setItem("player","boy");
 			break;
 		case 2:
 			$("body").css("background",'url("bg_girl.jpg")');
@@ -583,6 +610,7 @@ function change_player(player) {
 			$("#player").css("background-size",'60px auto');
 			$(".grid td").css("border-color",' #fb00f6');
 			$(".grid tr").css("border-color",' #fb00f6');
+			sessionStorage.setItem("player","girl");
 			break;
 	}
 	

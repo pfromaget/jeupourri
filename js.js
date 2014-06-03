@@ -196,6 +196,14 @@ function morebeer() {
 		
 		var x=Math.floor((Math.random() * 9) + 1);
 		var y=Math.floor((Math.random() * 9) + 1);
+		
+		while(!is_empty(tableleft+x*60,tabletop+y*60)) {
+		
+			x=Math.floor((Math.random() * 9) + 1);
+			y=Math.floor((Math.random() * 9) + 1);
+		
+		}
+		
 		var newbeer = document.createElement('div');
 		$(newbeer).addClass("beer");
 		$(newbeer).addClass("objet");
@@ -220,10 +228,10 @@ function moreboss() {
 		var x=Math.floor((Math.random() * 9) + 1);
 		var y=Math.floor((Math.random() * 9) + 1);
 		
-		while(!is_empty(x*60,y*60)) {
+		while(!is_empty(tableleft+x*60,tabletop+y*60)) {
 		
-			var x=Math.floor((Math.random() * 9) + 1);
-			var y=Math.floor((Math.random() * 9) + 1);
+			x=Math.floor((Math.random() * 9) + 1);
+			y=Math.floor((Math.random() * 9) + 1);
 		
 		}
 		
@@ -251,10 +259,10 @@ function morecops() {
 		var x=Math.floor((Math.random() * 9) + 1);
 		var y=Math.floor((Math.random() * 9) + 1);
 		
-		while(!is_empty(x*60,y*60)) {
+		while(!is_empty(tableleft+x*60,tabletop+y*60)) {
 		
-			var x=Math.floor((Math.random() * 9) + 1);
-			var y=Math.floor((Math.random() * 9) + 1);
+			x=Math.floor((Math.random() * 9) + 1);
+			y=Math.floor((Math.random() * 9) + 1);
 		
 		}
 		
@@ -282,10 +290,10 @@ function morecode() {
 		var x=Math.floor((Math.random() * 9) + 1);
 		var y=Math.floor((Math.random() * 9) + 1);
 		
-		while(!is_empty(x*60,y*60)) {
+		while(!is_empty(tableleft+x*60,tabletop+y*60)) {
 		
-			var x=Math.floor((Math.random() * 9) + 1);
-			var y=Math.floor((Math.random() * 9) + 1);
+			x=Math.floor((Math.random() * 9) + 1);
+			y=Math.floor((Math.random() * 9) + 1);
 		
 		}
 		
@@ -315,10 +323,10 @@ function morecoffee() {
 		var x=Math.floor((Math.random() * 9) + 1);
 		var y=Math.floor((Math.random() * 9) + 1);
 		
-		while(!is_empty(x*60,y*60)) {
+		while(!is_empty(tableleft+x*60,tabletop+y*60)) {
 		
-			var x=Math.floor((Math.random() * 9) + 1);
-			var y=Math.floor((Math.random() * 9) + 1);
+			x=Math.floor((Math.random() * 9) + 1);
+			y=Math.floor((Math.random() * 9) + 1);
 		
 		}
 		
@@ -349,10 +357,10 @@ function moretoilet() {
 				var tableleft = $('#grid').offset().left;
 				var x=Math.floor((Math.random() * 9) + 1);
 				var y=Math.floor((Math.random() * 9) + 1);
-				while(!is_empty(x*60,y*60)) {
+				while(!is_empty(tableleft+x*60,tabletop+y*60)) {
 		
-					var x=Math.floor((Math.random() * 9) + 1);
-					var y=Math.floor((Math.random() * 9) + 1);
+					x=Math.floor((Math.random() * 9) + 1);
+					y=Math.floor((Math.random() * 9) + 1);
 				
 				}
 				

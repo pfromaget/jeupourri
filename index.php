@@ -14,7 +14,7 @@ $hauteur = 10;
 		<script type="text/javascript" src="js.js"></script>
 		<script type="text/javascript" src="http://static6.spartoo.com/js/jquery.min.js"></script>
 	</head>
-	<body onkeydown="move_player(<?=$largeur?>,<?=$hauteur?>,event);event.preventDefault();" onload="loop();">
+	<body onkeydown="move_player(<?=$largeur?>,<?=$hauteur?>,event);event.preventDefault();" onload="loop();"  onclick="$('#regles').hide();">
 	<div id="content">
 	<?php
 
@@ -69,6 +69,21 @@ $hauteur = 10;
 	<div id="player"></div>';
 
 	?>
+	</div>
+	<div id="regles">
+		<h1>Le jeu sans nom</h1>
+		<b>Règles du jeu :</b><br>
+		<ul>
+			<li>But du jeu : avoir le score le plus elevé</li>
+			<li>Déplacement avec les flèches du clavier</li>
+			<li>Gagner des points en attrapant : bières (1pt), pages de codes (1pt), café (1pt) et toilettes (2pt)</li>
+			<li>L'alcoolémie augmente de 0.2g a chaque bière</li>
+			<li>L'alcoolémie diminue de 2g a chaque passage aux toilettes</li>
+			<li>Le café double les points gagnés pendant une durée limitée</li>
+			<li>Si le patron vous attrape avec une page de code, il ne vous dira rien, sinon vous perdez 2 points de score</li>
+			<li>Si la police vous attrape avec moins de 5g d'alcool elle ne vous dira rien, sinon vous avez perdu</li>
+		</ul>
+		<span>Cliquez pour démarrer !</span>
 	</div>
 	</body>
 </html>

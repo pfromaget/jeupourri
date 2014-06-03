@@ -184,6 +184,8 @@ function init_player() {
 	var tableleft = $('#grid').offset().left;
 	$('#player').css("left", tableleft );
 	$('#player').css("display","block");
+	$('#regles').css("left", tableleft );
+	
 }
 
 function morebeer() {

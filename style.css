@@ -133,3 +133,30 @@ body {
 	width: 150px;
 	text-align:center;
 }
+
+#regles {
+	position:absolute;
+	top: 10px;
+	left: 10px;
+	background: black;
+	color: white;
+	border: 1px solid gray;
+	width: 600px;
+	height: 600px;
+	top: 100px;
+}
+
+@-webkit-keyframes blinker {  
+  from { opacity: 1.0; }
+  to { opacity: 0.0; }
+}
+
+#regles span {
+	color: red;
+	margin-left: 25%;
+	font-size: 30px;
+	-webkit-animation-name: blinker;  
+	-webkit-animation-iteration-count: infinite;  
+	-webkit-animation-timing-function: cubic-bezier(1.0,0,0,1.0);
+	-webkit-animation-duration: 1s;
+}

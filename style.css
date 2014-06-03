@@ -82,6 +82,14 @@ body {
 	position:absolute;
 }
 
+.coffee {
+	background:url("coffee.png") ;
+	background-size:60px auto;
+	width:60px;
+	height:60px;
+	position:absolute;
+}
+
 #score {
 	color:white;
 	text-align:center;
@@ -116,4 +124,12 @@ body {
 .choose_player:hover{
 	cursor: pointer;
 	border: 1px dashed white;
+}
+
+#message {
+	font-weight: bold;
+	border: 2px dashed red;
+	border-radius: 5px;
+	width: 150px;
+	text-align:center;
 }

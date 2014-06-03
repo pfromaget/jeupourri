@@ -5,13 +5,7 @@ Bugs :
 
 Fonctions :
 
-- Empecher l'apparition sur une case occupée
-- Empecher les boss/flics d'aller sur une case occupée
 - Plus de bières à la fois ?
 - Plus de boss à la fois a partir d'un certain niveau ?
 - Changement de couleur/visage du perso quand l'alcoolémie augmente ?
-- Message quand choper par le boss ?
-- Faire apparaitre des flics aléatoirement qui bougent (gif animé girophare ca serait fun)
-- Collision avec flic = perdu si alcool > 5
-- Faire apparaitre des tasses de café = déplacement plus rapide (genre 2 fois dans la meme direction au lieu de un pendant 10 mouvements)
 - Peut etre mettre apparition des toilettes random sur la collision avec une biere plutot que sur déplacement joueur (car si on déplace dans le vide ca apparait)

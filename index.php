@@ -11,6 +11,7 @@ $hauteur = 10;
 		<title>Dev life</title>
 		<meta charset='utf8'></meta>
 		<link rel="stylesheet" href="style.css">
+		<link rel="icon" href="favicon.ico" />
 		<script type="text/javascript" src="js.js"></script>
 		<script type="text/javascript" src="http://static6.spartoo.com/js/jquery.min.js"></script>
 	</head>

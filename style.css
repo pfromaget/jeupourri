@@ -146,6 +146,10 @@ body {
 	top: 100px;
 }
 
+#regles:hover {
+	cursor:pointer;
+}
+
 @-webkit-keyframes blinker {  
   from { opacity: 1.0; }
   to { opacity: 0.0; }
@@ -159,4 +163,14 @@ body {
 	-webkit-animation-iteration-count: infinite;  
 	-webkit-animation-timing-function: cubic-bezier(1.0,0,0,1.0);
 	-webkit-animation-duration: 1s;
+}
+
+
+#facebook {
+	position:absolute;
+	background: transparent;
+	width: 600px;
+	height: 100px;
+	top: 710px;
+	color:white;
 }

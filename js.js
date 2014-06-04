@@ -218,6 +218,7 @@ function init_player() {
 	$('#player').css("left", tableleft );
 	$('#player').css("display","block");
 	$('#regles').css("left", tableleft );
+	$('#facebook').css("left", tableleft );
 	$("#message").hide();
 }
 

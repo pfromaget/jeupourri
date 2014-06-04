@@ -43,6 +43,21 @@ $hauteur = 10;
 		<br />
 		<div id="message"></div>
 		<div id="debug"></div>
+		<div id="highscore">';
+		
+		if(file_exists("configure.php")) {
+			include "configure.php";
+			if($production_on) {
+				mysql_connect($db_host,$db_user,$db_password);
+				mysql_select_db($db_database);
+				$query = mysql_query("SELECT * FROM score ORDER BY score DESC LIMIT 5");
+				while($array = mysql_fetch_array($query)) {
+					echo $array['player']." - ".$array['score']."<br />";
+				}
+			}
+		}
+		
+		echo '</div>
 	</div>
 	<div id="divgrid">
 	<table class="grid" id="grid">';

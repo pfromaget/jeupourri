@@ -14,7 +14,7 @@ $hauteur = 10;
 		<script type="text/javascript" src="js.js"></script>
 		<script type="text/javascript" src="http://static6.spartoo.com/js/jquery.min.js"></script>
 	</head>
-	<body onkeydown="move_player(<?=$largeur?>,<?=$hauteur?>,event);event.preventDefault();" onload="loop();"  onclick="$('#regles').hide();">
+	<body onkeydown="move_player(<?=$largeur?>,<?=$hauteur?>,event);event.preventDefault();" onload="ask_pseudo();loop();"  onclick="$('#regles').hide();">
 	<div id="content">
 	<?php
 

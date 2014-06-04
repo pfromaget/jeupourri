@@ -561,6 +561,7 @@ function checkcollision() {
 				$.ajax({
 				  type: "POST",
 				  url: "add_score.php",
+				  async: false,
 				  data: { player: getCookie("player"), score: sessionStorage.getItem("score") }
 				});
 				location.reload();

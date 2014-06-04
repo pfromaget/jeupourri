@@ -8,7 +8,7 @@ $hauteur = 10;
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>Jeu pourri</title>
+		<title>Dev life</title>
 		<meta charset='utf8'></meta>
 		<link rel="stylesheet" href="style.css">
 		<script type="text/javascript" src="js.js"></script>
@@ -105,5 +105,7 @@ $hauteur = 10;
 		</ul>
 		<span>Cliquez pour démarrer !</span>
 	</div>
+	<div id="facebook">
+	<iframe src="//www.facebook.com/plugins/like.php?href=http%3A%2F%2Fwww.rotten-games.com%2Fjeu%2F&amp;width=600&amp;layout=standard&amp;action=like&amp;show_faces=false&amp;share=true&amp;height=35&amp;colorscheme=dark&amp;appId=238301449547296" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:600px; height:35px;" allowTransparency="true"></iframe></div>
 	</body>
 </html>

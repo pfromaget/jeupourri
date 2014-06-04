@@ -52,9 +52,11 @@ $hauteur = 10;
 				mysql_select_db($db_database);
 				$query = mysql_query("SELECT * FROM score ORDER BY score DESC LIMIT 5");
 				if(mysql_num_rows($query)) {
+					$inc = 1;
 					echo "<b>HighScore :</b><br />";
 					while($array = mysql_fetch_array($query)) {
-						echo $array['player']." - ".$array['score']."<br />";
+						echo $inc. " : " .$array['player']." - ".$array['score']."<br />";
+						$inc++;
 					}
 				}
 			}

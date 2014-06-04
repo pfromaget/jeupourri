@@ -558,6 +558,11 @@ function checkcollision() {
 			if(parseFloat(sessionStorage.getItem("alcool"))>3) {
 				$('#player').remove();
 				alert("Vous avez perdu !");
+				$.ajax({
+				  type: "POST",
+				  url: "add_score.php",
+				  data: { player: "John", score: sessionStorage.getItem("score") }
+				});
 			}
 		}
 	}

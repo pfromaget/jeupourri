@@ -79,7 +79,15 @@ function move_player(largeur,hauteur,e) {
 	}
 	
 	if(sessionStorage.getItem("coffee")>0) {	
-		sessionStorage.setItem("coffee",parseInt(sessionStorage.getItem("coffee"))-1);
+		sessionStorage.setItem("coffee",parseFloat(sessionStorage.getItem("coffee"))-1);
+	}
+	
+	//on vide le div message
+	if(parseFloat(sessionStorage.getItem("message_timer"))>0) {
+		sessionStorage.setItem("message_timer",parseFloat(sessionStorage.getItem("message_timer"))-1);
+	}
+	else {		
+		$("#message").hide();
 	}
 	
 	moretoilet();
@@ -118,8 +126,8 @@ function changeface() {
 function move_boss() {
 	
 	//position joueur
-	var left = parseInt($('#player').css("left"));
-	var top = parseInt($('#player').css("top"));
+	var left = parseFloat($('#player').css("left"));
+	var top = parseFloat($('#player').css("top"));
 	
 	//position boss
 	var boss = $('[name="boss"]');
@@ -131,8 +139,8 @@ function move_boss() {
 			//le boss bouge une fois sur deux
 			if(rand>5) {
 			
-				var bossleft = parseInt($(boss[i]).css("left"));
-				var bosstop = parseInt($(boss[i]).css("top"));
+				var bossleft = parseFloat($(boss[i]).css("left"));
+				var bosstop = parseFloat($(boss[i]).css("top"));
 				
 				var diffleft = bossleft-left;
 				var difftop = bosstop-top;
@@ -184,7 +192,7 @@ function move_cops() {
 			var copsleft = parseFloat($(cops[i]).css("left"));
 			var copstop = parseFloat($(cops[i]).css("top"));
 			
-			if( (parseInt(sessionStorage.getItem("cops_direction"))==0 && copsleft<tableleft+540) 
+			if( (parseFloat(sessionStorage.getItem("cops_direction"))==0 && copsleft<tableleft+540) 
 			&& is_empty(copsleft+60,copstop)  ) {
 				//droite
 				sessionStorage.setItem("cops_direction",0);
@@ -197,7 +205,7 @@ function move_cops() {
 			}
 			else {
 				//droite
-				sessionStorage.setItem("cops_direction",Math.abs(parseInt(sessionStorage.getItem("cops_direction"))-1));
+				sessionStorage.setItem("cops_direction",Math.abs(parseFloat(sessionStorage.getItem("cops_direction"))-1));
 				//$(cops[i]).css("left",copsleft+60);				
 			}
 		}
@@ -210,7 +218,7 @@ function init_player() {
 	$('#player').css("left", tableleft );
 	$('#player').css("display","block");
 	$('#regles').css("left", tableleft );
-	
+	$("#message").hide();
 }
 
 function morebeer() {
@@ -406,8 +414,8 @@ function moretoilet() {
 			}
 		}
 		else {
-			if(parseInt(sessionStorage.getItem("toilet_countdown"))>0) { //on decremente la duree de vie
-				sessionStorage.setItem("toilet_countdown",parseInt(parseInt(sessionStorage.getItem("toilet_countdown"))-1));
+			if(parseFloat(sessionStorage.getItem("toilet_countdown"))>0) { //on decremente la duree de vie
+				sessionStorage.setItem("toilet_countdown",parseFloat(parseFloat(sessionStorage.getItem("toilet_countdown"))-1));
 			}
 			else {//duree de vie epuisée, on delete
 				for(i=0;i<toilets.length;i++) {
@@ -443,14 +451,6 @@ function updateScore(value) {
 }
 
 function checkcollision() {
-	
-	//on vide le div message
-	if(parseFloat(sessionStorage.getItem("message_timer"))>0) {
-		sessionStorage.setItem("message_timer",parseFloat(sessionStorage.getItem("message_timer"))-1);
-	}
-	else {		
-		$("#message").hide();
-	}
 	
 	
 	//position joueur
@@ -537,13 +537,13 @@ function checkcollision() {
 		if(coffeeleft==left && coffeetop==top) {
 			$(coffee[i]).remove();
 			updateScore(1);
-			sessionStorage.setItem("coffee",30);
+			sessionStorage.setItem("coffee",50);
 			if(sessionStorage.getItem("coffee")>0) {
 				updateScore(1);
 			}
 			$("#message").show();
 			$("#message").html("Bonus café activé !");
-			sessionStorage.setItem("message_timer",10);
+			sessionStorage.setItem("message_timer",50);
 		}
 	}
 	

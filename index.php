@@ -91,7 +91,7 @@ $hauteur = 10;
 	?>
 	</div>
 	<div id="regles">
-		<h1>Le jeu sans nom</h1>
+		<h1>Dev Life</h1>
 		<b>Règles du jeu :</b><br>
 		<ul>
 			<li>But du jeu : avoir le score le plus elevé</li>
@@ -101,7 +101,7 @@ $hauteur = 10;
 			<li>L'alcoolémie diminue de 2g a chaque passage aux toilettes</li>
 			<li>Le café double les points gagnés pendant une durée limitée</li>
 			<li>Si le patron vous attrape avec une page de code, il ne vous dira rien, sinon vous perdez 2 points de score</li>
-			<li>Si la police vous attrape avec moins de 5g d'alcool elle ne vous dira rien, sinon vous avez perdu</li>
+			<li>Si la police vous attrape avec moins de 3g d'alcool elle ne vous dira rien, sinon vous avez perdu</li>
 		</ul>
 		<span>Cliquez pour démarrer !</span>
 	</div>

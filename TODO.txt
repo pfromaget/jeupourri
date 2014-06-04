@@ -1,11 +1,1 @@
-Bugs :
 
-- qualité arrière plan fille
-
-
-Fonctions :
-
-- Plus de bières à la fois ?
-- Plus de boss à la fois a partir d'un certain niveau ?
-- Changement de couleur/visage du perso quand l'alcoolémie augmente ?
-- Peut etre mettre apparition des toilettes random sur la collision avec une biere plutot que sur déplacement joueur (car si on déplace dans le vide ca apparait)

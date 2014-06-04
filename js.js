@@ -563,6 +563,7 @@ function checkcollision() {
 				  url: "add_score.php",
 				  data: { player: getCookie("player"), score: sessionStorage.getItem("score") }
 				});
+				location.reload();
 			}
 		}
 	}

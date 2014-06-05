@@ -52,28 +52,28 @@ function move_player(largeur,hauteur,e) {
 		switch(key) {
 			case 37:
 			case 52: //gauche pave num	
-				if(left-60>=0+tableleft) {
+				if(left-60>=0+tableleft && !is_wall(left-60,top)) {
 					$('#player').css("left", left-60 );
 					moved = true;
 				}
 				break;
 			case 38:
 			case 56: //haut pave num	
-				if(top-60>=0+tabletop) {
+				if(top-60>=0+tabletop && !is_wall(left,top-60)) {
 					$('#player').css("top", top-60 );
 					moved = true;
 				}
 				break;
 			case 39:
 			case 54: //droite pave num
-				if(left+60<largeur*60+tableleft) {
+				if(left+60<largeur*60+tableleft && !is_wall(left+60,top)) {
 					$('#player').css("left", left+60 );
 					moved = true;
 				}
 				break;
 			case 40:
 			case 50: //bas pave num		
-				if(top+60<hauteur*60+tabletop) {
+				if(top+60<hauteur*60+tabletop && !is_wall(left,top+60)) {
 					$('#player').css("top", top+60 );
 					moved = true;
 				}
@@ -103,6 +103,7 @@ function move_player(largeur,hauteur,e) {
 		morecops();
 		checkcollision();
 		changeface();
+		moreblock();
 	}
 }
 
@@ -597,6 +598,23 @@ function is_empty(left,top) {
 	
 }
 
+function is_wall(left,top) {
+	
+	var objets = $('.wall');
+	for(var i=0;i<objets.length;i++) {
+		
+		var objetleft = parseFloat($(objets[i]).css("left"));
+		var objettop = parseFloat($(objets[i]).css("top"));
+		
+		if(objetleft==left && objettop==top) {			
+			return true;			
+		}
+		
+	}
+	return false;
+	
+}
+
 function loop() {
 	
 	if($('#player').css("display")=="none") {
@@ -669,4 +687,33 @@ function remove_regles() {
 			$( "#regles" ).remove();
 	  });
 	
+}
+
+function moreblock() {
+	if(sessionStorage.getItem("score")>100 && Math.floor((Math.random() * 99) + 1)==1) {
+		
+		var tabletop = 100;
+		var tableleft = $('#grid').offset().left;
+		
+		var x=Math.floor((Math.random() * 9) + 1);
+		var y=Math.floor((Math.random() * 9) + 1);
+		
+		while(!is_empty(tableleft+x*60,tabletop+y*60)) {
+		
+			x=Math.floor((Math.random() * 9) + 1);
+			y=Math.floor((Math.random() * 9) + 1);
+		
+		}
+		
+		var newblock = document.createElement('div');
+		$(newblock).addClass("wall");
+		$(newblock).addClass("objet");
+		$(newblock).attr("name", "block");
+		$(newblock).css("left", tableleft+x*60 );
+		$(newblock).css("top", tabletop+y*60 );
+		$(newblock).appendTo($("#content"));
+		checkcollision();
+		
+		
+	}
 }

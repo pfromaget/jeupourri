@@ -49,6 +49,15 @@ body {
 }
 
 
+.wall {
+	background:url("wall.png") ;
+	background-size:60px auto;
+	width:60px;
+	height:60px;
+	position:absolute;
+}
+
+
 .boss {
 	background:url("boss.png") ;
 	background-size:60px auto;

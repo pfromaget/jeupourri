@@ -658,3 +658,15 @@ function getCookie(cname) {
     }
     return "";
 }
+
+function remove_regles() {
+	
+	  $( "#regles" ).animate({
+		opacity: 0.25,
+		top: "+=600",
+		height: "toggle"
+	  }, 1500, function() {
+			$( "#regles" ).remove();
+	  });
+	
+}

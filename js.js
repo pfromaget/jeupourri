@@ -545,7 +545,7 @@ function checkcollision() {
 		if(coffeeleft==left && coffeetop==top) {
 			$(coffee[i]).remove();
 			updateScore(1);
-			sessionStorage.setItem("coffee",50);
+			sessionStorage.setItem("coffee",sessionStorage.getItem("coffee")+50);
 			if(sessionStorage.getItem("coffee")>0) {
 				updateScore(1);
 			}

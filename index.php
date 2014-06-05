@@ -10,12 +10,15 @@ $hauteur = 10;
 	<head>
 		<title>Dev life</title>
 		<meta charset='utf8'></meta>
+		<meta property="og:title" content="Dev Life" />
+		<meta property="og:description" content="Jeu à la con, incarnez un développeur !" />
+		<meta property="og:image" content="player.jpg" />
 		<link rel="stylesheet" href="style.css">
 		<link rel="icon" href="favicon.ico" />
 		<script type="text/javascript" src="js.js"></script>
 		<script type="text/javascript" src="http://static6.spartoo.com/js/jquery.min.js"></script>
 	</head>
-	<body onkeydown="move_player(<?=$largeur?>,<?=$hauteur?>,event);event.preventDefault();" onload="ask_pseudo();loop();"  onclick="$('#regles').hide();">
+	<body onkeydown="move_player(<?=$largeur?>,<?=$hauteur?>,event);event.preventDefault();" onload="ask_pseudo(false);loop();"  onclick="$('#regles').hide();">
 	<div id="content">
 	<?php
 
@@ -23,6 +26,10 @@ $hauteur = 10;
 	echo '
 	
 	<div id="leftpanel">
+		<div>
+		<b>Joueur :</b>
+		<div id="pseudo" onclick="ask_pseudo(true);"></div>
+		</div>
 		<div>
 			<b>Score :</b>
 			<div id="score">0</div>

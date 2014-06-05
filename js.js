@@ -12,6 +12,7 @@ var cases = new Object();
 
 function move_player(largeur,hauteur,e) {
 	
+	var moved = false;
 
 	move_boss();
 	move_cops();
@@ -53,24 +54,28 @@ function move_player(largeur,hauteur,e) {
 			case 52: //gauche pave num	
 				if(left-60>=0+tableleft) {
 					$('#player').css("left", left-60 );
+					moved = true;
 				}
 				break;
 			case 38:
 			case 56: //haut pave num	
 				if(top-60>=0+tabletop) {
 					$('#player').css("top", top-60 );
+					moved = true;
 				}
 				break;
 			case 39:
 			case 54: //droite pave num
 				if(left+60<largeur*60+tableleft) {
 					$('#player').css("left", left+60 );
+					moved = true;
 				}
 				break;
 			case 40:
 			case 50: //bas pave num		
 				if(top+60<hauteur*60+tabletop) {
 					$('#player').css("top", top+60 );
+					moved = true;
 				}
 				break;
 			default:
@@ -90,13 +95,15 @@ function move_player(largeur,hauteur,e) {
 		$("#message").hide();
 	}
 	
-	moretoilet();
-	moreboss();
-	morecode();
-	morecoffee();
-	morecops();
-	checkcollision();
-	changeface();
+	if(moved) {
+		moretoilet();
+		moreboss();
+		morecode();
+		morecoffee();
+		morecops();
+		checkcollision();
+		changeface();
+	}
 }
 
 function changeface() {
@@ -624,10 +631,14 @@ function change_player(player) {
 	
 }
 
-function ask_pseudo() {
-	if(getCookie("player")=="") {
+function ask_pseudo(force) {
+	if(getCookie("player")=="" || force) {
 		var player = prompt("Pseudo :", "K3vin")
 		setCookie("player",player,30);
+		$("#pseudo").html(player);
+	}
+	else {
+		$("#pseudo").html(getCookie("player"));
 	}
 }
 

@@ -222,6 +222,7 @@ function move_cops() {
 }
 
 function init_player() {
+	change_player(getCookie("geek"));
 	var tableleft = $('#grid').offset().left;
 	$('#player').css("left", tableleft );
 	$('#player').css("display","block");
@@ -264,7 +265,7 @@ function morebeer() {
 function moreboss() {
 	
 	var boss = $('[name="boss"]');
-	if(boss.length==0 && parseFloat(sessionStorage.getItem("score"))>5 && Math.floor((Math.random() * 29) + 1)==1 ) {
+	if(boss.length==0 && parseFloat(decrypt(sessionStorage.getItem("score")),"moreboss")>5 && Math.floor((Math.random() * 29) + 1)==1 ) {
 	
 		var tabletop = 100;
 		var tableleft = $('#grid').offset().left;
@@ -454,8 +455,8 @@ function updateCode(value) {
 
 function updateScore(value) {
 	
-	sessionStorage.setItem("score",parseFloat(sessionStorage.getItem("score"))+value);
-	$("#score").html(sessionStorage.getItem("score"));
+	sessionStorage.setItem("score",crypt(parseFloat(decrypt(sessionStorage.getItem("score")),"updatescore")+value));
+	$("#score").html(decrypt(sessionStorage.getItem("score"),"updatescore 2"));
 	
 }
 
@@ -571,7 +572,7 @@ function checkcollision() {
 				  type: "POST",
 				  url: "add_score.php",
 				  async: false,
-				  data: { player: getCookie("player"), score: sessionStorage.getItem("score") }
+				  data: { player: getCookie("player"), score: decrypt(sessionStorage.getItem("score")) }
 				});
 				location.reload();
 			}
@@ -627,15 +628,16 @@ function loop() {
 }
 
 function change_player(player) {
-	
-	switch(player) {
+	switch(parseInt(player)) {
 		case 1:
+		default:
 			$("body").css("background",'url("bg.jpg")');
 			$("#player").css("background",'url("player.png")');
 			$("#player").css("background-size",'60px auto');
 			$(".grid td").css("border-color",' #0af4fd');
 			$(".grid tr").css("border-color",' #0af4fd');
 			sessionStorage.setItem("player","boy");
+			setCookie("geek",1,30);
 			break;
 		case 2:
 			$("body").css("background",'url("bg_girl.jpg")');
@@ -644,6 +646,7 @@ function change_player(player) {
 			$(".grid td").css("border-color",' #fb00f6');
 			$(".grid tr").css("border-color",' #fb00f6');
 			sessionStorage.setItem("player","girl");
+			setCookie("geek",2,30);
 			break;
 	}
 	
@@ -651,7 +654,16 @@ function change_player(player) {
 
 function ask_pseudo(force) {
 	if(getCookie("player")=="" || force) {
-		var player = prompt("Pseudo :", "K3vin")
+		var i=0;
+		while(player==null) {
+			if(i==0) {
+				var player = prompt("Pseudo :", "K3vin");
+			}
+			else {
+				var player = prompt("On t'as demandé le pseudo boulet !", "K3vin");
+			}
+			i++;
+		}
 		setCookie("player",player,30);
 		$("#pseudo").html(player);
 	}
@@ -690,7 +702,7 @@ function remove_regles() {
 }
 
 function moreblock() {
-	if(sessionStorage.getItem("score")>100 && Math.floor((Math.random() * 99) + 1)==1) {
+	if(decrypt(sessionStorage.getItem("score"),"moreblock") >100&& Math.floor((Math.random() * 99) + 1)==1) {
 		
 		var tabletop = 100;
 		var tableleft = $('#grid').offset().left;
@@ -716,4 +728,19 @@ function moreblock() {
 		
 		
 	}
+}
+
+
+function crypt(value) {
+	var value2 = value*17;
+	value2 = value2.toString(16);
+	return value2;
+}
+
+function decrypt(value2,debug) {
+	var value = parseInt(value2,16)/17;	
+	if(parseInt(value)!=value) {
+		value=0;
+	}
+	return value;
 }

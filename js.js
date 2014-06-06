@@ -14,13 +14,10 @@ function move_player(largeur,hauteur,e) {
 	
 	var moved = false;
 
-	move_boss();
-	move_cops();
-	checkcollision();
 		
 	var event = e || window.event;
 		
-	if (event) {
+	if (1) {
 		
 		var tabletop = 100;
 		var tableleft = $('#grid').offset().left;
@@ -28,7 +25,8 @@ function move_player(largeur,hauteur,e) {
 		var left = parseFloat($('#player').css("left"));
 		var top = parseFloat($('#player').css("top"));
 		
-		var key = event.keyCode;
+		var key = event.keyCode || e;
+		
 		
 		//très alcoolisé
 		if(parseFloat(sessionStorage.getItem("alcool"))>5) {
@@ -101,9 +99,12 @@ function move_player(largeur,hauteur,e) {
 		morecode();
 		morecoffee();
 		morecops();
-		checkcollision();
 		changeface();
 		moreblock();
+		
+		move_boss();
+		move_cops();
+		checkcollision();
 	}
 }
 
@@ -201,7 +202,7 @@ function move_cops() {
 			var copstop = parseFloat($(cops[i]).css("top"));
 			
 			if( (parseFloat(sessionStorage.getItem("cops_direction"))==0 && copsleft<tableleft+540) 
-			&& is_empty(copsleft+60,copstop)  ) {
+			&& is_empty(copsleft+60,copstop)  ) {left
 				//droite
 				sessionStorage.setItem("cops_direction",0);
 				$(cops[i]).css("left",copsleft+60);
@@ -621,6 +622,11 @@ function loop() {
 	if($('#player').css("display")=="none") {
 		init_player();
 		morebeer();
+		
+		$("body").on('swipeleft',function(e,data){move_player(10,10,37);});
+		$("body").on('swiperight',function(e,data){move_player(10,10,39);});
+		$("body").on('swipeup',function(e,data){move_player(10,10,38);});
+		$("body").on('swipedown',function(e,data){move_player(10,10,40);});
 	}
 	
 	
@@ -743,4 +749,20 @@ function decrypt(value2,debug) {
 		value=0;
 	}
 	return value;
+}
+
+
+function getTouchDirection(dir) {
+	if(dir=="right") {
+		return 39;
+	}
+	else if(dir=="left") {
+		return 37;
+	}
+	else if(dir=="up") {
+		return 38;
+	}
+	else if(dir=="down") {
+		return 40;
+	}	
 }

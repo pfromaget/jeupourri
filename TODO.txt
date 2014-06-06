@@ -1,2 +1,2 @@
 
-- Sécuriser le score
+- gérer la fin du jeu si bloquer entre les murs

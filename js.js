@@ -627,10 +627,14 @@ function loop() {
 		$("body").on('swiperight',function(e,data){move_player(10,10,39);});
 		$("body").on('swipeup',function(e,data){move_player(10,10,38);});
 		$("body").on('swipedown',function(e,data){move_player(10,10,40);});
+		
 	}
 	
 	
-	setTimeout(function(){loop()},1000);
+	morejokes();
+	
+	
+	setTimeout(function(){loop()},20000);
 }
 
 function change_player(player) {
@@ -765,4 +769,36 @@ function getTouchDirection(dir) {
 	else if(dir=="down") {
 		return 40;
 	}	
+}
+
+function morejokes () {
+
+	if($("#jokes").length>0) {
+		$("#jokes").remove();
+	}
+	
+	
+	var tabletop = 100;
+	var tableleft = $('#grid').offset().left;
+	var jokes = document.createElement('marquee');
+	$(jokes).addClass("jokes");
+	$(jokes).attr("name", "jokes");
+	$(jokes).attr("id", "jokes");
+	$(jokes).attr("behavior", "slide");
+	$(jokes).attr("scrollamount", "40");
+	$(jokes).css("left", tableleft );
+	$(jokes).css("top", tabletop-20 );
+	$.ajax({
+		type: "POST",
+		url: "add_score.php",
+		complete: function(response){
+			console.log(response.responseText);
+			$(jokes).html(response.responseText);
+			$(jokes).appendTo($("#content"));
+		}
+	});	
+	
+	
+	
+
 }

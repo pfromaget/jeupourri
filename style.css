@@ -177,7 +177,6 @@ body {
 
 #facebook {
 	position:absolute;
-	background: transparent;
 	width: 600px;
 	height: 100px;
 	top: 710px;
@@ -189,4 +188,15 @@ body {
 	text-align:center;
 	font-size:30px;
 	cursor: pointer;
+}
+
+.jokes {
+	position: fixed;
+	width: 600px;
+	color: lightgray;
+	background: rgba(0, 0, 0, 0.6);
+	height: 20px;
+	font-size:16px;
+	overflow: hidden;
+	font-style: italic;
 }

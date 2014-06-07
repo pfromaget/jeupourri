@@ -16,7 +16,6 @@ $hauteur = 10;
 		<link rel="stylesheet" href="style.css">
 		<link rel="icon" href="favicon.ico" />
 		<script type="text/javascript" src="js.js"></script>
-		<script type="text/javascript" src="tocca.js"></script>
 		<script type="text/javascript" src="http://static6.spartoo.com/js/jquery.min.js"></script>
 		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquerymobile/1.4.2/jquery.mobile.js"></script>
 	</head>

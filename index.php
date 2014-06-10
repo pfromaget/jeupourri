@@ -19,7 +19,7 @@ $hauteur = 10;
 		<script type="text/javascript" src="http://static6.spartoo.com/js/jquery.min.js"></script>
 		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquerymobile/1.4.2/jquery.mobile.js"></script>
 	</head>
-	<body ontouch= onkeydown="move_player(<?=$largeur?>,<?=$hauteur?>,event);event.preventDefault();" onload="ask_pseudo(false);loop();"  onclick="remove_regles();">
+	<body onkeydown="move_player(<?=$largeur?>,<?=$hauteur?>,event);event.preventDefault();" onload="ask_pseudo(false);loop();"  onclick="remove_regles();">
 	<div id="content">
 	<?php
 

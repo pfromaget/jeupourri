@@ -632,6 +632,7 @@ function loop() {
 	
 	
 	morejokes();
+	check_blocked();
 	
 	
 	setTimeout(function(){loop()},20000);
@@ -712,7 +713,7 @@ function remove_regles() {
 }
 
 function moreblock() {
-	if(decrypt(sessionStorage.getItem("score"),"moreblock") >100&& Math.floor((Math.random() * 99) + 1)==1) {
+	//if(decrypt(sessionStorage.getItem("score"),"moreblock") >100&& Math.floor((Math.random() * 99) + 1)==1) {
 		
 		var tabletop = 100;
 		var tableleft = $('#grid').offset().left;
@@ -737,7 +738,7 @@ function moreblock() {
 		checkcollision();
 		
 		
-	}
+	//}
 }
 
 
@@ -792,7 +793,6 @@ function morejokes () {
 		type: "POST",
 		url: "add_score.php",
 		complete: function(response){
-			console.log(response.responseText);
 			$(jokes).html(response.responseText);
 			$(jokes).appendTo($("#content"));
 		}
@@ -801,4 +801,38 @@ function morejokes () {
 	
 	
 
+}
+
+function is_blocked(left,top) {
+	
+	if((is_wall(left-60,top) || left-60<0)
+	&& (is_wall(left+60,top) || left+60>600)
+	&& (is_wall(left,top-60) || top-60<100)
+	&& (is_wall(left,top+60) || top+60>700)
+	) {
+		return true;
+	}
+	
+	
+}
+
+
+function check_blocked() {
+	if(score>100) {		
+		//position joueur
+		var left = parseFloat($('#player').css("left"));
+		var top = parseFloat($('#player').css("top"));
+		
+		if(is_blocked(left,top)) {
+			$('#player').remove();
+			alert("Vous avez perdu !");
+			$.ajax({
+			  type: "POST",
+			  url: "add_score.php",
+			  async: false,
+			  data: { player: getCookie("player"), score: decrypt(sessionStorage.getItem("score")) }
+			});
+			location.reload();
+		}
+	}
 }

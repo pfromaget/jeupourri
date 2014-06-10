@@ -1,2 +1,2 @@
 
-- gérer la fin du jeu si bloquer entre les murs
+- remove biere si coincée entre 4 murs

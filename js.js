@@ -202,7 +202,7 @@ function move_cops() {
 			var copstop = parseFloat($(cops[i]).css("top"));
 			
 			if( (parseFloat(sessionStorage.getItem("cops_direction"))==0 && copsleft<tableleft+540) 
-			&& is_empty(copsleft+60,copstop)  ) {left
+			&& is_empty(copsleft+60,copstop)  ) {
 				//droite
 				sessionStorage.setItem("cops_direction",0);
 				$(cops[i]).css("left",copsleft+60);

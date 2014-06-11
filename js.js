@@ -102,6 +102,7 @@ function move_player(largeur,hauteur,e) {
 		changeface();
 		moreblock();
 		
+		checkcollision();
 		move_boss();
 		move_cops();
 		checkcollision();

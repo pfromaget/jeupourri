@@ -240,13 +240,13 @@ function morebeer() {
 		var tabletop = 100;
 		var tableleft = $('#grid').offset().left;
 		
-		var x=Math.floor((Math.random() * 9) + 1);
-		var y=Math.floor((Math.random() * 9) + 1);
+		var x=Math.floor((Math.random() * 10));
+		var y=Math.floor((Math.random() * 10));
 		
 		while(!is_empty(tableleft+x*60,tabletop+y*60)) {
 		
-			x=Math.floor((Math.random() * 9) + 1);
-			y=Math.floor((Math.random() * 9) + 1);
+			x=Math.floor((Math.random() * 10));
+			y=Math.floor((Math.random() * 10));
 		
 		}
 		
@@ -266,18 +266,18 @@ function morebeer() {
 function moreboss() {
 	
 	var boss = $('[name="boss"]');
-	if(boss.length==0 && parseFloat(decrypt(sessionStorage.getItem("score")),"moreboss")>5 && Math.floor((Math.random() * 29) + 1)==1 ) {
+	if(boss.length==0 && parseFloat(decrypt(sessionStorage.getItem("score")),"moreboss")>5 && Math.floor((Math.random() * 29))==1 ) {
 	
 		var tabletop = 100;
 		var tableleft = $('#grid').offset().left;
 		
-		var x=Math.floor((Math.random() * 9) + 1);
-		var y=Math.floor((Math.random() * 9) + 1);
+		var x=Math.floor((Math.random() * 10));
+		var y=Math.floor((Math.random() * 10));
 		
 		while(!is_empty(tableleft+x*60,tabletop+y*60)) {
 		
-			x=Math.floor((Math.random() * 9) + 1);
-			y=Math.floor((Math.random() * 9) + 1);
+			x=Math.floor((Math.random() * 10));
+			y=Math.floor((Math.random() * 10));
 		
 		}
 		
@@ -297,18 +297,18 @@ function moreboss() {
 function morecops() {
 	
 	var cops = $('[name="cops"]');
-	if(cops.length==0 && parseFloat(sessionStorage.getItem("alcool"))>3 /*&& Math.floor((Math.random() * 29) + 1)==1*/ ) {
+	if(cops.length==0 && parseFloat(sessionStorage.getItem("alcool"))>3 /*&& Math.floor((Math.random() * 29))==1*/ ) {
 		var tabletop = 100;
 		var tableleft = $('#grid').offset().left;
 		
 		
-		var x=Math.floor((Math.random() * 9) + 1);
-		var y=Math.floor((Math.random() * 9) + 1);
+		var x=Math.floor((Math.random() * 10));
+		var y=Math.floor((Math.random() * 10));
 		
 		while(!is_empty(tableleft+x*60,tabletop+y*60)) {
 		
-			x=Math.floor((Math.random() * 9) + 1);
-			y=Math.floor((Math.random() * 9) + 1);
+			x=Math.floor((Math.random() * 10));
+			y=Math.floor((Math.random() * 10));
 		
 		}
 		
@@ -328,18 +328,18 @@ function morecops() {
 function morecode() {
 	
 	var code = $('[name="code"]');
-	if(code.length<2 && Math.floor((Math.random() * 49) + 1)==1 ) {
+	if(code.length<2 && Math.floor((Math.random() * 49))==1 ) {
 	
 		var tabletop = 100;
 		var tableleft = $('#grid').offset().left;
 		
-		var x=Math.floor((Math.random() * 9) + 1);
-		var y=Math.floor((Math.random() * 9) + 1);
+		var x=Math.floor((Math.random() * 10));
+		var y=Math.floor((Math.random() * 10));
 		
 		while(!is_empty(tableleft+x*60,tabletop+y*60)) {
 		
-			x=Math.floor((Math.random() * 9) + 1);
-			y=Math.floor((Math.random() * 9) + 1);
+			x=Math.floor((Math.random() * 10));
+			y=Math.floor((Math.random() * 10));
 		
 		}
 		
@@ -361,18 +361,18 @@ function morecode() {
 function morecoffee() {
 	
 	var coffee = $('[name="coffee"]');
-	if(coffee.length<2 && Math.floor((Math.random() * 99) + 1)==1 ) {
+	if(coffee.length<2 && Math.floor((Math.random() * 99))==1 ) {
 	
 		var tabletop = 100;
 		var tableleft = $('#grid').offset().left;
 		
-		var x=Math.floor((Math.random() * 9) + 1);
-		var y=Math.floor((Math.random() * 9) + 1);
+		var x=Math.floor((Math.random() * 10));
+		var y=Math.floor((Math.random() * 10));
 		
 		while(!is_empty(tableleft+x*60,tabletop+y*60)) {
 		
-			x=Math.floor((Math.random() * 9) + 1);
-			y=Math.floor((Math.random() * 9) + 1);
+			x=Math.floor((Math.random() * 10));
+			y=Math.floor((Math.random() * 10));
 		
 		}
 		
@@ -397,16 +397,16 @@ function moretoilet() {
 		var toilets = $('[name="wc"]');
 		if(toilets.length==0) {
 		
-			if(Math.floor((Math.random() * 30) + 1)==1) {
+			if(Math.floor((Math.random() * 30))==1) {
 				
 				var tabletop = 100;
 				var tableleft = $('#grid').offset().left;
-				var x=Math.floor((Math.random() * 9) + 1);
-				var y=Math.floor((Math.random() * 9) + 1);
+				var x=Math.floor((Math.random() * 10));
+				var y=Math.floor((Math.random() * 10));
 				while(!is_empty(tableleft+x*60,tabletop+y*60)) {
 		
-					x=Math.floor((Math.random() * 9) + 1);
-					y=Math.floor((Math.random() * 9) + 1);
+					x=Math.floor((Math.random() * 10));
+					y=Math.floor((Math.random() * 10));
 				
 				}
 				
@@ -596,6 +596,13 @@ function is_empty(left,top) {
 		}
 		
 	}
+	
+	var playerleft = parseFloat($('#player').css("left"));
+	var playertop = parseFloat($('#player').css("top"));
+	if(playerleft==left && playertop==top) {			
+		return false;			
+	}
+	
 	return true;
 	
 }
@@ -713,18 +720,20 @@ function remove_regles() {
 }
 
 function moreblock() {
-	//if(decrypt(sessionStorage.getItem("score"),"moreblock") >100&& Math.floor((Math.random() * 99) + 1)==1) {
+	var blocks = $('[name="block"]');
+	if(blocks.length<50) {
+	if(decrypt(sessionStorage.getItem("score"),"moreblock") >100&& Math.floor((Math.random() * 99))==1) {
 		
 		var tabletop = 100;
 		var tableleft = $('#grid').offset().left;
 		
-		var x=Math.floor((Math.random() * 9) + 1);
-		var y=Math.floor((Math.random() * 9) + 1);
+		var x=Math.floor((Math.random() * 10));
+		var y=Math.floor((Math.random() * 10));
 		
 		while(!is_empty(tableleft+x*60,tabletop+y*60)) {
 		
-			x=Math.floor((Math.random() * 9) + 1);
-			y=Math.floor((Math.random() * 9) + 1);
+			x=Math.floor((Math.random() * 10));
+			y=Math.floor((Math.random() * 10));
 		
 		}
 		
@@ -738,7 +747,8 @@ function moreblock() {
 		checkcollision();
 		
 		
-	//}
+	}
+	}
 }
 
 
@@ -805,8 +815,9 @@ function morejokes () {
 
 function is_blocked(left,top) {
 	
-	if((is_wall(left-60,top) || left-60<0)
-	&& (is_wall(left+60,top) || left+60>600)
+	var tableleft = $('#grid').offset().left;
+	if((is_wall(left-60,top) || left-60<tableleft)
+	&& (is_wall(left+60,top) || left+60>600+tableleft)
 	&& (is_wall(left,top-60) || top-60<100)
 	&& (is_wall(left,top+60) || top+60>700)
 	) {
@@ -834,5 +845,17 @@ function check_blocked() {
 			});
 			location.reload();
 		}
+		
+		//position biere
+		var beers = $('[name="beer"]');
+		for(i=0;i<beers.length;i++) {
+			var beerleft = parseFloat($(beers[i]).css("left"));
+			var beertop = parseFloat($(beers[i]).css("top"));
+			if(is_blocked(beerleft,beertop)) {
+				$(beers[i]).remove();
+				morebeer();
+			}
+		}
+		
 	}
 }

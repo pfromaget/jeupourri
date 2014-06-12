@@ -665,10 +665,10 @@ function loopBeer() {
 		sessionStorage.setItem("beer_green",1);
 	}	
 	done = 1;
-	if(parseInt(sessionStorage.setItem("score"))>200) {
+	if(decrypt(sessionStorage.getItem("score"))>200) {
 		timerBeer = setTimeout(function(){loopBeer()},5000);
 	}
-	else if(parseInt(sessionStorage.setItem("score"))>200) {
+	else if(decrypt(sessionStorage.getItem("score"))>100) {
 		timerBeer = setTimeout(function(){loopBeer()},10000);		
 	}
 	else {

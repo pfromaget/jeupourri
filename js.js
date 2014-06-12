@@ -2,11 +2,13 @@ sessionStorage.setItem("alcool",0);
 sessionStorage.setItem("score",0);
 sessionStorage.setItem("code",0);
 sessionStorage.setItem("toilet_countdown",0);
+sessionStorage.setItem("beer_green",0);
 sessionStorage.setItem("cops_direction",0);
 sessionStorage.setItem("message_timer",0);
 sessionStorage.setItem("coffee",0);
 sessionStorage.setItem("coffee_move",0);
 sessionStorage.setItem("player","boy");
+var timerBeer = 0;
 
 var cases = new Object();
 
@@ -229,6 +231,7 @@ function init_player() {
 	$('#player').css("left", tableleft );
 	$('#player').css("display","block");
 	$('#regles').css("left", tableleft );
+	
 	$('#facebook').css("left", tableleft );
 	$("#message").hide();
 }
@@ -259,6 +262,8 @@ function morebeer() {
 		$(newbeer).css("top", tabletop+y*60 );
 		$(newbeer).appendTo($("#content"));
 		checkcollision();
+		
+		loopBeer();
 		
 	}
 		
@@ -477,10 +482,18 @@ function checkcollision() {
 		if(beerleft==left && beertop==top) {
 			$(beers[i]).remove();
 			updateAlcool(0.2);
-			updateScore(1);
+			if(parseInt(sessionStorage.getItem("beer_green"))>0) {
+				updateScore(-2);
+			}
+			else {
+				updateScore(1);
+			}
 			if(sessionStorage.getItem("coffee")>0) {
 				updateScore(1);
 			}
+			clearTimeout(timerBeer);			
+			sessionStorage.setItem("beer_green",0);
+			done=0;
 			morebeer();
 		}
 	}
@@ -645,6 +658,24 @@ function loop() {
 	
 	setTimeout(function(){loop()},20000);
 }
+var done = 0;
+function loopBeer() {
+	if(done==1) {
+		$(".beer").css("background",'url("green_beer.png")');
+		sessionStorage.setItem("beer_green",1);
+	}	
+	done = 1;
+	if(parseInt(sessionStorage.setItem("score"))>200) {
+		timerBeer = setTimeout(function(){loopBeer()},5000);
+	}
+	else if(parseInt(sessionStorage.setItem("score"))>200) {
+		timerBeer = setTimeout(function(){loopBeer()},10000);		
+	}
+	else {
+		timerBeer = setTimeout(function(){loopBeer()},20000);		
+	}
+	
+}
 
 function change_player(player) {
 	switch(parseInt(player)) {
@@ -728,13 +759,18 @@ function moreblock() {
 		var tabletop = 100;
 		var tableleft = $('#grid').offset().left;
 		
-		var x=Math.floor((Math.random() * 10));
-		var y=Math.floor((Math.random() * 10));
+		var x=0;
+		var y=0;
 		
 		while(!is_empty(tableleft+x*60,tabletop+y*60)) {
-		
-			x=Math.floor((Math.random() * 10));
-			y=Math.floor((Math.random() * 10));
+			console.log("qaa");
+			if(x==9) {
+				x=0;
+				y++;
+			}
+			else {
+				x++;
+			}
 		
 		}
 		

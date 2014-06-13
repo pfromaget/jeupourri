@@ -4,6 +4,7 @@ sessionStorage.setItem("code",0);
 sessionStorage.setItem("toilet_countdown",0);
 sessionStorage.setItem("beer_green",0);
 sessionStorage.setItem("cops_direction",0);
+sessionStorage.setItem("army_direction",0);
 sessionStorage.setItem("message_timer",0);
 sessionStorage.setItem("coffee",0);
 sessionStorage.setItem("coffee_move",0);
@@ -103,10 +104,12 @@ function move_player(largeur,hauteur,e) {
 		morecops();
 		changeface();
 		moreblock();
+		morearmy();
 		
 		checkcollision();
 		move_boss();
 		move_cops();
+		move_army();
 		checkcollision();
 	}
 }
@@ -225,6 +228,35 @@ function move_cops() {
 	
 }
 
+function move_army() {
+	//les flics bougent en ligne droite
+	var army = $('[name="army"]');
+	if(army.length>0) {		
+		for(i=0;i<army.length;i++) {
+			var armyleft = parseFloat($(army[i]).css("left"));
+			var armytop = parseFloat($(army[i]).css("top"));
+			
+			if( (parseFloat(sessionStorage.getItem("army_direction"))==0 && armytop<640) 
+			&& is_empty(armyleft,armytop+60)  ) {
+				//bas
+				sessionStorage.setItem("army_direction",0);
+				$(army[i]).css("top",armytop+60);
+			}
+			else if(armytop>=160 && is_empty(armyleft,armytop-60)) {
+				//haut
+				sessionStorage.setItem("army_direction",1);
+				$(army[i]).css("top",armytop-60);
+			}
+			else {
+				//bas
+				sessionStorage.setItem("army_direction",Math.abs(parseFloat(sessionStorage.getItem("army_direction"))-1));
+				//$(cops[i]).css("left",copsleft+60);				
+			}
+		}
+	}
+	
+}
+
 function init_player() {
 	change_player(getCookie("geek"));
 	var tableleft = $('#grid').offset().left;
@@ -325,6 +357,39 @@ function morecops() {
 		$(newcops).css("left", tableleft+x*60 );
 		$(newcops).css("top", tabletop+y*60 );
 		$(newcops).appendTo($("#content"));
+		checkcollision();
+		
+	}
+
+}
+
+
+function morearmy() {
+	
+	var army = $('[name="army"]');
+	if(army.length==0 && parseFloat(sessionStorage.getItem("alcool"))>3 && parseFloat(sessionStorage.getItem("score"))>200
+	&& Math.floor((Math.random() * 29))==1 ) {
+		var tabletop = 100;
+		var tableleft = $('#grid').offset().left;
+		
+		
+		var x=Math.floor((Math.random() * 10));
+		var y=Math.floor((Math.random() * 10));
+		
+		while(!is_empty(tableleft+x*60,tabletop+y*60)) {
+		
+			x=Math.floor((Math.random() * 10));
+			y=Math.floor((Math.random() * 10));
+		
+		}
+		
+		var newarmy = document.createElement('div');
+		$(newarmy).addClass("army");
+		$(newarmy).addClass("objet");
+		$(newarmy).attr("name", "army");
+		$(newarmy).css("left", tableleft+x*60 );
+		$(newarmy).css("top", tabletop+y*60 );
+		$(newarmy).appendTo($("#content"));
 		checkcollision();
 		
 	}
@@ -594,6 +659,27 @@ function checkcollision() {
 		}
 	}
 	
+	
+	//army ?
+	var army = $('[name="army"]');
+	for(i=0;i<army.length;i++) {
+		var armyleft = parseFloat($(army[i]).css("left"));
+		var armytop = parseFloat($(army[i]).css("top"));
+		if(armyleft==left && armytop==top) {
+			$(army[i]).remove();
+			if(parseFloat(sessionStorage.getItem("alcool"))>3) {
+				$('#player').remove();
+				alert("Vous avez perdu !");
+				$.ajax({
+				  type: "POST",
+				  url: "add_score.php",
+				  async: false,
+				  data: { player: getCookie("player"), score: decrypt(sessionStorage.getItem("score")) }
+				});
+				location.reload();
+			}
+		}
+	}
 	
 }
 
@@ -891,6 +977,17 @@ function check_blocked() {
 			if(is_blocked(beerleft,beertop)) {
 				$(beers[i]).remove();
 				morebeer();
+			}
+		}
+		
+		//position flics
+		var cops = $('[name="cops"]');
+		for(i=0;i<cops.length;i++) {
+			var copsleft = parseFloat($(cops[i]).css("left"));
+			var copstop = parseFloat($(cops[i]).css("top"));
+			if(is_blocked(copsleft,copstop)) {
+				$(cops[i]).remove();
+				morecops();
 			}
 		}
 		

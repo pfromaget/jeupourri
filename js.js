@@ -367,7 +367,7 @@ function morecops() {
 function morearmy() {
 	
 	var army = $('[name="army"]');
-	if(army.length==0 && parseFloat(sessionStorage.getItem("alcool"))>3 && parseFloat(sessionStorage.getItem("score"))>200
+	if(army.length==0 && parseFloat(sessionStorage.getItem("alcool"))>3 && decrypt(sessionStorage.getItem("score"))>200
 	&& Math.floor((Math.random() * 29))==1 ) {
 		var tabletop = 100;
 		var tableleft = $('#grid').offset().left;
@@ -707,6 +707,25 @@ function is_empty(left,top) {
 	
 }
 
+
+function is_block(left,top) {
+	
+	var objets = $('.wall');
+	for(var i=0;i<objets.length;i++) {
+		
+		var objetleft = parseFloat($(objets[i]).css("left"));
+		var objettop = parseFloat($(objets[i]).css("top"));
+		
+		if(objetleft==left && objettop==top) {			
+			return true;			
+		}
+		
+	}
+	
+	return false;
+	
+}
+
 function is_wall(left,top) {
 	
 	var objets = $('.wall');
@@ -845,18 +864,27 @@ function moreblock() {
 		var tabletop = 100;
 		var tableleft = $('#grid').offset().left;
 		
-		var x=0;
-		var y=0;
+		var x=Math.floor((Math.random() * 10));
+		var y=Math.floor((Math.random() * 10));
 		
-		while(!is_empty(tableleft+x*60,tabletop+y*60)) {
-			console.log("qaa");
-			if(x==9) {
-				x=0;
-				y++;
-			}
-			else {
-				x++;
-			}
+		var inc =0;
+		
+		while((is_block(tableleft+x*60-60, tabletop+y*60) 
+		|| is_block(tableleft+x*60-60, tabletop+y*60-60)  
+		|| is_block(tableleft+x*60, tabletop+y*60-60)  
+		|| is_block(tableleft+x*60+60, tabletop+y*60-60)  
+		|| is_block(tableleft+x*60+60, tabletop+y*60)  
+		|| is_block(tableleft+x*60+60, tabletop+y*60+60)  
+		|| is_block(tableleft+x*60, tabletop+y*60+60)  
+		|| is_block(tableleft+x*60-60, tabletop+y*60+60)   )
+		|| !is_empty(tableleft+x*60, tabletop+y*60)) {
+			
+			
+			var x=Math.floor((Math.random() * 10));
+			var y=Math.floor((Math.random() * 10));
+			
+			inc++;
+			if(inc>10) return 0;
 		
 		}
 		

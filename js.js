@@ -747,13 +747,7 @@ function loop() {
 	
 	if($('#player').css("display")=="none") {
 		init_player();
-		morebeer();
-		
-		$("body").on('swipeleft',function(e,data){move_player(10,10,37);});
-		$("body").on('swiperight',function(e,data){move_player(10,10,39);});
-		$("body").on('swipeup',function(e,data){move_player(10,10,38);});
-		$("body").on('swipedown',function(e,data){move_player(10,10,40);});
-		
+		morebeer();		
 	}
 	
 	

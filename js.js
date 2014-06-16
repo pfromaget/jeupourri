@@ -293,8 +293,16 @@ function morebeer() {
 		$(newbeer).css("left", tableleft+x*60 );
 		$(newbeer).css("top", tabletop+y*60 );
 		$(newbeer).appendTo($("#content"));
-		checkcollision();
 		
+		//ajout de la biere en bdd
+		$.ajax({
+			type: "POST",
+			url: "ajax_multi.php",
+			async: true,
+			data: { action: 'add_item', type: 'beer', left: x*60, top: y*60 }
+		});	
+		
+		checkcollision();			
 		loopBeer();
 		
 	}
@@ -326,6 +334,15 @@ function moreboss() {
 		$(newboss).css("left", tableleft+x*60 );
 		$(newboss).css("top", tabletop+y*60 );
 		$(newboss).appendTo($("#content"));
+		
+		//ajout en bdd
+		$.ajax({
+			type: "POST",
+			url: "ajax_multi.php",
+			async: true,
+			data: { action: 'add_item', type: 'boss', left: x*60, top: y*60 }
+		});	
+		
 		checkcollision();
 		
 	}
@@ -357,6 +374,15 @@ function morecops() {
 		$(newcops).css("left", tableleft+x*60 );
 		$(newcops).css("top", tabletop+y*60 );
 		$(newcops).appendTo($("#content"));
+		
+		//ajout en bdd
+		$.ajax({
+			type: "POST",
+			url: "ajax_multi.php",
+			async: true,
+			data: { action: 'add_item', type: 'cops', left: x*60, top: y*60 }
+		});	
+		
 		checkcollision();
 		
 	}
@@ -390,6 +416,15 @@ function morearmy() {
 		$(newarmy).css("left", tableleft+x*60 );
 		$(newarmy).css("top", tabletop+y*60 );
 		$(newarmy).appendTo($("#content"));
+		
+		//ajout en bdd
+		$.ajax({
+			type: "POST",
+			url: "ajax_multi.php",
+			async: true,
+			data: { action: 'add_item', type: 'army', left: x*60, top: y*60 }
+		});	
+		
 		checkcollision();
 		
 	}
@@ -422,6 +457,16 @@ function morecode() {
 		$(newcode).css("left", tableleft+x*60 );
 		$(newcode).css("top", tabletop+y*60 );
 		$(newcode).appendTo($("#content"));
+		
+		//ajout en bdd
+		$.ajax({
+			type: "POST",
+			url: "ajax_multi.php",
+			async: true,
+			data: { action: 'add_item', type: 'code', left: x*60, top: y*60 }
+		});	
+		
+		
 		checkcollision();
 		
 	}
@@ -455,6 +500,15 @@ function morecoffee() {
 		$(newcoffee).css("left", tableleft+x*60 );
 		$(newcoffee).css("top", tabletop+y*60 );
 		$(newcoffee).appendTo($("#content"));
+		
+		//ajout en bdd
+		$.ajax({
+			type: "POST",
+			url: "ajax_multi.php",
+			async: true,
+			data: { action: 'add_item', type: 'coffee', left: x*60, top: y*60 }
+		});	
+		
 		checkcollision();
 		
 	}
@@ -490,6 +544,18 @@ function moretoilet() {
 				$(toilet).css("top", tabletop+y*60 );
 				$(toilet).appendTo($("#content"));
 				sessionStorage.setItem("toilet_countdown",10); //duree de vie de la case toilettes
+				
+				
+				//ajout en bdd
+				$.ajax({
+					type: "POST",
+					url: "ajax_multi.php",
+					async: true,
+					data: { action: 'add_item', type: 'toilet', left: x*60, top: y*60 }
+				});	
+				
+				
+				
 				checkcollision();
 				
 				
@@ -545,6 +611,16 @@ function checkcollision() {
 		var beerleft = parseFloat($(beers[i]).css("left"));
 		var beertop = parseFloat($(beers[i]).css("top"));
 		if(beerleft==left && beertop==top) {
+		
+			//partie commencée, impossible à joindre
+			$.ajax({
+				type: "POST",
+				url: "ajax_multi.php",
+				async: true,
+				data: { action: 'started'}
+			});	
+		
+		
 			$(beers[i]).remove();
 			updateAlcool(0.2);
 			if(parseInt(sessionStorage.getItem("beer_green"))>0) {
@@ -747,7 +823,6 @@ function loop() {
 	
 	if($('#player').css("display")=="none") {
 		init_player();
-		morebeer();		
 	}
 	
 	
@@ -840,14 +915,25 @@ function getCookie(cname) {
 
 function remove_regles() {
 	
-	  $( "#regles" ).animate({
+	//enleve les regles
+	$( "#regles" ).animate({
 		opacity: 0.25,
 		top: "+=600",
 		height: "toggle"
 	  }, 1500, function() {
 			$( "#regles" ).remove();
-	  });
+	});
+	  
+	//log le début de partie
+	$.ajax({
+		type: "POST",
+		url: "ajax_multi.php",
+		async: false, //le cookie game_id doit etre set avant morebeer
+		data: { action: 'start' }
+	});	
 	
+	//premiere biere
+	morebeer();		
 }
 
 function moreblock() {
@@ -889,6 +975,15 @@ function moreblock() {
 		$(newblock).css("left", tableleft+x*60 );
 		$(newblock).css("top", tabletop+y*60 );
 		$(newblock).appendTo($("#content"));
+		
+		//ajout du bloc en bdd
+		$.ajax({
+			type: "POST",
+			url: "ajax_multi.php",
+			async: true,
+			data: { action: 'add_item', type: 'block', left: x*60, top: y*60 }
+		});	
+		
 		checkcollision();
 		
 		
@@ -1015,3 +1110,5 @@ function check_blocked() {
 		
 	}
 }
+
+setCookie("game_id", "0", 1)

@@ -3,7 +3,6 @@
 $largeur = 10;
 $hauteur = 10;
 
-
 ?>
 <!DOCTYPE html>
 <html>
@@ -16,10 +15,10 @@ $hauteur = 10;
 		<link rel="stylesheet" href="style.css">
 		<link rel="icon" href="favicon.ico" />
 		<script type="text/javascript" src="js.js"></script>
-		<script type="text/javascript" src="http://static6.spartoo.com/js/jquery.min.js"></script>
+		<script type="text/javascript" src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
 		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquerymobile/1.4.2/jquery.mobile.js"></script>
 	</head>
-	<body onkeydown="move_player(<?=$largeur?>,<?=$hauteur?>,event);event.preventDefault();" onload="ask_pseudo(false);loop();"  onclick="remove_regles();">
+	<body onkeydown="move_player(<?=$largeur?>,<?=$hauteur?>,event);event.preventDefault();" onload="ask_pseudo(false);loop(<?=$_GET['game_id']?>);loopmulti(<?=$_GET['game_id']?>);"  onclick="remove_regles();">
 	<div id="content">
 	<?php
 
@@ -72,6 +71,9 @@ $hauteur = 10;
 		}
 		
 		echo '</div>
+		<div id="multi">
+			<img src="multi.gif" onclick="showpopup();" >
+		</div>
 	</div>
 	<div id="divgrid">
 	<table class="grid" id="grid">';
@@ -98,6 +100,8 @@ $hauteur = 10;
 	<div id="player"></div>';
 
 	?>
+	</div>
+	<div id="games">
 	</div>
 	<div id="regles">
 		<h1>Dev Life</h1>

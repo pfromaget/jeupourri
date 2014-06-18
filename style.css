@@ -40,6 +40,16 @@ body {
 	display: none;
 }
 
+
+.player2 {
+	background:url("player_2.png") ;
+	background-size:60px auto;
+	width:60px;
+	height:60px;
+	position:absolute;
+	top: 100px;
+}
+
 .beer {
 	background:url("beer.png") ;
 	background-size:60px auto;
@@ -153,6 +163,24 @@ body {
 	text-align:center;
 }
 
+#games {
+	position:absolute;
+	top: 10px;
+	left: 10px;
+	background: black;
+	color: white;
+	border: 1px solid gray;
+	width: 600px;
+	height: 600px;
+	top: 100px;
+}
+
+#games a {
+	color: white;
+	text-decoration: underline;
+	cursor: pointer;
+}
+
 #regles {
 	position:absolute;
 	top: 10px;
@@ -209,4 +237,9 @@ body {
 	font-size:12px;
 	overflow: hidden;
 	font-style: italic;
+}
+
+#multi {
+	padding-top: 50px;
+	text-align: center;
 }

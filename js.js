@@ -13,6 +13,18 @@ var timerBeer = 0;
 
 var cases = new Object();
 
+function getQueryVariable(variable) {
+    var query = window.location.search.substring(1);
+    var vars = query.split('&');
+    for (var i = 0; i < vars.length; i++) {
+        var pair = vars[i].split('=');
+        if (decodeURIComponent(pair[0]) == variable) {
+            return decodeURIComponent(pair[1]);
+        }
+    }
+    console.log('Query variable %s not found', variable);
+}
+
 function move_player(largeur,hauteur,e) {
 	
 	var moved = false;
@@ -97,6 +109,31 @@ function move_player(largeur,hauteur,e) {
 	}
 	
 	if(moved) {
+		
+		//ajout du bloc en bdd
+		var game_id = getQueryVariable("game_id");
+		console.log(game_id);
+		//if(game_id>0) {
+			var id_player = 2;
+		//}
+		//else {
+		//	var id_player = "";
+		//}
+		
+		$.ajax({
+			type: "POST",
+			url: "ajax_multi.php",
+			async: true,
+			data: { action: 'del_item', type: 'player'+id_player, left: left-tableleft, top: top-100 }
+		});	
+		$.ajax({
+			type: "POST",
+			url: "ajax_multi.php",
+			async: true,
+			data: { action: 'add_item', type: 'player'+id_player, left: parseFloat($('#player').css("left"))-tableleft, top: parseFloat($('#player').css("top"))-100 }
+		});	
+		
+		
 		moretoilet();
 		moreboss();
 		morecode();
@@ -257,15 +294,46 @@ function move_army() {
 	
 }
 
-function init_player() {
+function init_player(nb) {
+	
+	//log le début de partie
+	$.ajax({
+		type: "POST",
+		url: "ajax_multi.php",
+		async: false, //le cookie game_id doit etre set avant morebeer
+		data: { action: 'start' }
+	});	
+	
+	
+	
 	change_player(getCookie("geek"));
 	var tableleft = $('#grid').offset().left;
-	$('#player').css("left", tableleft );
 	$('#player').css("display","block");
-	$('#regles').css("left", tableleft );
 	
+	if(nb==1) {
+		$('#player').css("left", tableleft );
+		$.ajax({
+			type: "POST",
+			url: "ajax_multi.php",
+			async: true,
+			data: { action: 'add_item', type: 'player', left: 0, top: 0 }
+		});
+	}
+	else {
+		$('#player').css("left", tableleft+540);
+		$.ajax({
+			type: "POST",
+			url: "ajax_multi.php",
+			async: true,
+			data: { action: 'add_item', type: 'player2', left: 540, top: 0 }
+		});
+	}
+	
+	
+	$('#regles').css("left", tableleft );	
 	$('#facebook').css("left", tableleft );
 	$("#message").hide();
+	$("#games").hide();
 }
 
 function morebeer() {
@@ -441,7 +509,13 @@ function morecode() {
 		
 		var x=Math.floor((Math.random() * 10));
 		var y=Math.floor((Math.random() * 10));
-		
+		var newboss = document.createElement('div');
+		$(newboss).addClass("boss");
+		$(newboss).addClass("objet");
+		$(newboss).attr("name", "boss");
+		$(newboss).css("left", tableleft+x*60 );
+		$(newboss).css("top", tabletop+y*60 );
+		$(newboss).appendTo($("#content"));
 		while(!is_empty(tableleft+x*60,tabletop+y*60)) {
 		
 			x=Math.floor((Math.random() * 10));
@@ -601,6 +675,9 @@ function updateScore(value) {
 function checkcollision() {
 	
 	
+	var tableleft = $('#grid').offset().left;	
+	var tabletop = 100;
+	
 	//position joueur
 	var left = parseFloat($('#player').css("left"));
 	var top = parseFloat($('#player').css("top"));
@@ -635,6 +712,13 @@ function checkcollision() {
 			clearTimeout(timerBeer);			
 			sessionStorage.setItem("beer_green",0);
 			done=0;
+			//enleve l'item en bdd
+			$.ajax({
+				type: "POST",
+				url: "ajax_multi.php",
+				async: true,
+				data: { action: 'del_item', type: 'beer', left: beerleft-tableleft, top: beertop-tabletop }
+			});	
 			morebeer();
 		}
 	}
@@ -653,6 +737,13 @@ function checkcollision() {
 			if(sessionStorage.getItem("coffee")>0) {
 				updateScore(2);
 			}
+			//enleve l'item en bdd
+			$.ajax({
+				type: "POST",
+				url: "ajax_multi.php",
+				async: true,
+				data: { action: 'del_item', type: 'toilet', left: wcleft-tableleft, top: wctop-tabletop }
+			});	
 		}
 	}
 	
@@ -677,6 +768,13 @@ function checkcollision() {
 				$("#message").html("Pas de page de code, vous avez perdu 2 points");
 				sessionStorage.setItem("message_timer",10);
 			}
+			//enleve l'item en bdd
+			$.ajax({
+				type: "POST",
+				url: "ajax_multi.php",
+				async: true,
+				data: { action: 'del_item', type: 'boss', left: bossleft-tableleft, top: bosstop-tabletop }
+			});	
 		}
 	}
 	
@@ -692,6 +790,13 @@ function checkcollision() {
 			if(sessionStorage.getItem("coffee")>0) {
 				updateScore(1);
 			}
+			//enleve l'item en bdd
+			$.ajax({
+				type: "POST",
+				url: "ajax_multi.php",
+				async: true,
+				data: { action: 'del_item', type: 'code', left: codeleft-tableleft, top: codetop-tabletop }
+			});	
 		}
 	}
 	
@@ -710,6 +815,13 @@ function checkcollision() {
 			$("#message").show();
 			$("#message").html("Bonus café activé !");
 			sessionStorage.setItem("message_timer",50);
+			//enleve l'item en bdd
+			$.ajax({
+				type: "POST",
+				url: "ajax_multi.php",
+				async: true,
+				data: { action: 'del_item', type: 'coffee', left: coffeeleft-tableleft, top: coffeetop-tabletop }
+			});	
 		}
 	}
 	
@@ -721,6 +833,13 @@ function checkcollision() {
 		var copstop = parseFloat($(cops[i]).css("top"));
 		if(copsleft==left && copstop==top) {
 			$(cops[i]).remove();
+			//enleve l'item en bdd
+			$.ajax({
+				type: "POST",
+				url: "ajax_multi.php",
+				async: true,
+				data: { action: 'del_item', type: 'cops', left: copsleft-tableleft, top: copstop-tabletop }
+			});	
 			if(parseFloat(sessionStorage.getItem("alcool"))>3) {
 				$('#player').remove();
 				alert("Vous avez perdu !");
@@ -729,8 +848,8 @@ function checkcollision() {
 				  url: "add_score.php",
 				  async: false,
 				  data: { player: getCookie("player"), score: decrypt(sessionStorage.getItem("score")) }
-				});
-				location.reload();
+				});				
+				window.location.href='index.php';
 			}
 		}
 	}
@@ -743,6 +862,13 @@ function checkcollision() {
 		var armytop = parseFloat($(army[i]).css("top"));
 		if(armyleft==left && armytop==top) {
 			$(army[i]).remove();
+			//enleve l'item en bdd
+			$.ajax({
+				type: "POST",
+				url: "ajax_multi.php",
+				async: true,
+				data: { action: 'del_item', type: 'army', left: armyleft-tableleft, top: armytop-tabletop }
+			});	
 			if(parseFloat(sessionStorage.getItem("alcool"))>3) {
 				$('#player').remove();
 				alert("Vous avez perdu !");
@@ -752,7 +878,7 @@ function checkcollision() {
 				  async: false,
 				  data: { player: getCookie("player"), score: decrypt(sessionStorage.getItem("score")) }
 				});
-				location.reload();
+				window.location.href='index.php';
 			}
 		}
 	}
@@ -819,12 +945,19 @@ function is_wall(left,top) {
 	
 }
 
-function loop() {
+function loop(game_id) {
 	
 	if($('#player').css("display")=="none") {
-		init_player();
+		
+		if(game_id) {
+			setCookie("game_id", game_id, 1);
+			$("#regles").hide();
+			init_player(2);
+		}
+		else {
+			init_player(1);			
+		}
 	}
-	
 	
 	morejokes();
 	check_blocked();
@@ -832,6 +965,93 @@ function loop() {
 	
 	setTimeout(function(){loop()},20000);
 }
+
+function loopmulti(game_id) {
+	
+	
+	var tableleft = $('#grid').offset().left;
+	//recupere les objets en place	
+	var objets = $('.objet');
+	var objetlist = "";
+	for(var i=0;i<objets.length;i++) {
+		
+		var objetname = $(objets[i]).attr("name");
+		var objetleft = parseFloat($(objets[i]).css("left"))-tableleft;
+		var objettop = parseFloat($(objets[i]).css("top"))-100;
+		
+		
+		objetlist+=objetname+"|"+objetleft+"|"+objettop+"|||";
+		
+	}
+	
+	//emplacement de l'autre joueur
+	if(game_id>0) {
+		var playerleft = parseFloat($("#player").css("left"))-tableleft;
+		var playertop = parseFloat($("#player").css("top"))-100;
+		objetlist+="player1|"+playerleft+"|"+playertop+"|||";
+	}
+	else if ($(".player2").length) {
+		var playerleft = parseFloat($(".player2").css("left"))-tableleft;
+		var playertop = parseFloat($(".player2").css("top"))-100;
+		console.log("marche "+playerleft);
+		objetlist+="player2|"+playerleft+"|"+playertop+"|||";
+	}
+	
+	
+	
+	//appel ajax avec liste des objets existant, retourne ce qui a faire
+	//ex: cops|100|200|delete
+	// code|100|200|new
+	console.log("fsdfsdfsdfsdf "+game_id);
+	$.ajax({
+		type: "POST",
+		url: "ajax_multi.php",
+		data: {action:"refresh_screen", objetlist: objetlist, game_id: game_id},
+		async: false,
+		complete: function(response){
+			console.log(response.responseText);
+			//gere les 2 actions pour mettre à jour la grille
+			var tab = response.responseText.split("|||");
+			for(i=0;i<tab.length;i++) {
+				var tab2 = tab[i].split("|");
+				if(tab2[3]=="new") {
+					var newobjet = document.createElement('div');
+					$(newobjet).addClass(tab2[0]);
+					$(newobjet).addClass("objet");
+					$(newobjet).attr("name", tab2[0]);
+					$(newobjet).css("left", tableleft+parseFloat(tab2[1]) );
+					$(newobjet).css("top", 100+parseFloat(tab2[2]) );
+					$(newobjet).appendTo($("#content"));
+				}
+				else if(tab2[3]=="delete") {
+					console.log("Delete element "+tab2[0]);
+					var objets = $('[name="'+tab2[0]+'"]');
+					for(var j=0;j<objets.length;j++) {
+						
+						var left = parseFloat($(objets[j]).css("left"))-tableleft;
+						var top = parseFloat($(objets[j]).css("top"))-100;
+						
+						if(left==parseFloat(tab2[1]) && top==parseFloat(tab2[2])) {
+							$(objets[j]).remove();
+							break;
+						}
+						
+					}
+				}
+			}
+		}
+	});	
+	
+	
+	
+	
+	
+	
+	setTimeout(function(){loopmulti(game_id)},500);
+}
+
+
+
 var done = 0;
 function loopBeer() {
 	if(done==1) {
@@ -924,13 +1144,7 @@ function remove_regles() {
 			$( "#regles" ).remove();
 	});
 	  
-	//log le début de partie
-	$.ajax({
-		type: "POST",
-		url: "ajax_multi.php",
-		async: false, //le cookie game_id doit etre set avant morebeer
-		data: { action: 'start' }
-	});	
+	
 	
 	//premiere biere
 	morebeer();		
@@ -1083,7 +1297,7 @@ function check_blocked() {
 			  async: false,
 			  data: { player: getCookie("player"), score: decrypt(sessionStorage.getItem("score")) }
 			});
-			location.reload();
+			window.location.href='index.php';
 		}
 		
 		//position biere
@@ -1109,6 +1323,26 @@ function check_blocked() {
 		}
 		
 	}
+}
+
+function showpopup() {
+	
+	
+	var tableleft = $('#grid').offset().left;
+	$('#games').css("left", tableleft );	
+	
+	$.ajax({
+		type: "POST",
+		url: "ajax_multi.php",
+		data: {action:'list_games'},
+		complete: function(response){
+			$('#games').html(response.responseText);
+		}
+	});	
+	
+	
+	$("#games").show();
+	
 }
 
 setCookie("game_id", "0", 1)

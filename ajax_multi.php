@@ -5,6 +5,13 @@ if(file_exists("configure.php")) {
 		mysql_connect($db_host,$db_user,$db_password);
 		mysql_select_db($db_database);
 		
+		if($_POST['game_id']>0) {
+			$player=2;
+		}
+		else {
+			$player=1;
+		}
+		
 		switch($_POST['action']) {
 
 			case 'start':
@@ -21,8 +28,8 @@ if(file_exists("configure.php")) {
 				break;
 			case 'add_item':
 				//enregistre la position de l'item ajouté
-				mysql_query("INSERT INTO games_elements (game_id, element, `left`, top)
-				VALUES ('".(int)$_COOKIE['game_id']."','".$_POST['type']."','".(float)$_POST['left']."','".(float)$_POST['top']."')");
+				mysql_query("INSERT INTO games_elements (game_id, element, `left`, top, player)
+				VALUES ('".(int)$_COOKIE['game_id']."','".$_POST['type']."','".(float)$_POST['left']."','".(float)$_POST['top']."', '".$player."' )");
 				break;
 			case 'update_item':
 				//met à jour la position de l'item
@@ -75,7 +82,23 @@ if(file_exists("configure.php")) {
 							|| !in_array($array['element'],array("player","player2"))
 						) {						
 										
-						$return.=$array['element']."|".$array["left"]."|".$array['top']."|new|||";
+							if(	$array['element']=="player") $array['element']="player1";
+							
+							if((!$_POST['game_id'])
+		
+							||
+							
+							(($array['element']!="cops" && $array['element']!="army" && $array['element']!="boss")
+							&& $_POST['game_id'])
+							
+							) {
+										
+								$return.=$array['element']."|".$array["left"]."|".$array['top']."|new|||";
+								
+							}							
+							elseif($array['player']==1 && $_POST['game_id']>0) {
+								$return.=$array['element']."|".$array["left"]."|".$array['top']."|new|||";
+							}
 						
 						}
 						

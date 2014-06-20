@@ -1,1 +1,1 @@
-- essaye de remettre les blocs comment avant, mais du coup il faut calculer le chemin
+- bug avec flics (disparition, déplacemnet bizarre)

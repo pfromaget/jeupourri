@@ -22,12 +22,14 @@ function getQueryVariable(variable) {
             return decodeURIComponent(pair[1]);
         }
     }
-    console.log('Query variable %s not found', variable);
+    //console.log('Query variable %s not found', variable);
 }
+
+var game_id_url = getQueryVariable("game_id");
 
 function move_player(largeur,hauteur,e) {
 	
-	var moved = false;
+	var moved = 0;
 
 		
 	var event = e || window.event;
@@ -67,28 +69,28 @@ function move_player(largeur,hauteur,e) {
 			case 52: //gauche pave num	
 				if(left-60>=0+tableleft && !is_wall(left-60,top)) {
 					$('#player').css("left", left-60 );
-					moved = true;
+					moved = 1;
 				}
 				break;
 			case 38:
 			case 56: //haut pave num	
 				if(top-60>=0+tabletop && !is_wall(left,top-60)) {
 					$('#player').css("top", top-60 );
-					moved = true;
+					moved = 1;
 				}
 				break;
 			case 39:
 			case 54: //droite pave num
 				if(left+60<largeur*60+tableleft && !is_wall(left+60,top)) {
 					$('#player').css("left", left+60 );
-					moved = true;
+					moved = 1;
 				}
 				break;
 			case 40:
 			case 50: //bas pave num		
 				if(top+60<hauteur*60+tabletop && !is_wall(left,top+60)) {
 					$('#player').css("top", top+60 );
-					moved = true;
+					moved = 1;
 				}
 				break;
 			default:
@@ -108,17 +110,16 @@ function move_player(largeur,hauteur,e) {
 		$("#message").hide();
 	}
 	
-	if(moved) {
+	if(moved>0) {
 		
 		//ajout du bloc en bdd
 		var game_id = getQueryVariable("game_id");
-		console.log(game_id);
-		//if(game_id>0) {
+		if(game_id>0) {
 			var id_player = 2;
-		//}
-		//else {
-		//	var id_player = "";
-		//}
+		}
+		else {
+			var id_player = "";
+		}
 		
 		$.ajax({
 			type: "POST",
@@ -176,10 +177,12 @@ function changeface() {
 
 }
 function move_boss() {
+	var moved = 0;
 	
 	//position joueur
 	var left = parseFloat($('#player').css("left"));
 	var top = parseFloat($('#player').css("top"));
+	var tableleft = parseFloat($('#grid').offset().left);
 	
 	//position boss
 	var boss = $('[name="boss"]');
@@ -204,12 +207,14 @@ function move_boss() {
 						//gauche
 						if(is_empty(bossleft-60,bosstop)) {
 							$(boss[i]).css("left",bossleft-60);
+							moved=1;
 						}
 					}
 					else {
 						//droite
 						if(is_empty(bossleft+60,bosstop)) {
 							$(boss[i]).css("left",bossleft+60);
+							moved=1;
 						}
 					}
 					
@@ -220,17 +225,37 @@ function move_boss() {
 						//haut
 						if(is_empty(bossleft,bosstop-60)) {
 							$(boss[i]).css("top",bosstop-60);
+							moved=1;
 						}
 					}
 					else {
 						//bas
 						if(is_empty(bossleft,bosstop+60)) {
 							$(boss[i]).css("top",bosstop+60);
+							moved=1;
 						}
 					}
 				}
+				//console.log("MOVED: "+moved);
+				if(moved>0) {
+					//console.log("GAME ID URL "+game_id_url);
+					//console.log("delete2 "+parseFloat(bossleft-tableleft)+" / "+parseFloat(bosstop-100));
+					$.ajax({
+						type: "POST",
+						url: "ajax_multi.php",
+						async: true,
+						data: { action: 'del_item', type: 'boss', left: parseFloat(bossleft-tableleft), top: parseFloat(bosstop-100), game_id: game_id_url }
+					});	
+					$.ajax({
+						type: "POST",
+						url: "ajax_multi.php",
+						async: true,
+						data: { action: 'add_item', type: 'boss', left: parseFloat($(boss[i]).css("left"))-tableleft, top: parseFloat($(boss[i]).css("top"))-100, game_id: game_id_url }
+					});
+				}
 			}
 		}
+		
 	}
 	
 }
@@ -260,6 +285,18 @@ function move_cops() {
 				sessionStorage.setItem("cops_direction",Math.abs(parseFloat(sessionStorage.getItem("cops_direction"))-1));
 				//$(cops[i]).css("left",copsleft+60);				
 			}
+			$.ajax({
+				type: "POST",
+				url: "ajax_multi.php",
+				async: true,
+				data: { action: 'del_item', type: 'cops', left: parseFloat(copsleft-tableleft), top: parseFloat(copstop-100), game_id: game_id_url }
+			});	
+			$.ajax({
+				type: "POST",
+				url: "ajax_multi.php",
+				async: true,
+				data: { action: 'add_item', type: 'cops', left: parseFloat($(cops[i]).css("left"))-tableleft, top: parseFloat($(cops[i]).css("top"))-100, game_id: game_id_url }
+			});
 		}
 	}
 	
@@ -378,10 +415,9 @@ function morebeer() {
 }
 
 function moreboss() {
-	
 	var boss = $('[name="boss"]');
 	if(boss.length==0 && parseFloat(decrypt(sessionStorage.getItem("score")),"moreboss")>5 && Math.floor((Math.random() * 29))==1 ) {
-	
+			
 		var tabletop = 100;
 		var tableleft = $('#grid').offset().left;
 		
@@ -408,7 +444,7 @@ function moreboss() {
 			type: "POST",
 			url: "ajax_multi.php",
 			async: true,
-			data: { action: 'add_item', type: 'boss', left: x*60, top: y*60 }
+			data: { action: 'add_item', type: 'boss', left: x*60, top: y*60, game_id: game_id_url }
 		});	
 		
 		checkcollision();
@@ -448,7 +484,7 @@ function morecops() {
 			type: "POST",
 			url: "ajax_multi.php",
 			async: true,
-			data: { action: 'add_item', type: 'cops', left: x*60, top: y*60 }
+			data: { action: 'add_item', type: 'cops', left: x*60, top: y*60, game_id: game_id_url }
 		});	
 		
 		checkcollision();
@@ -490,7 +526,7 @@ function morearmy() {
 			type: "POST",
 			url: "ajax_multi.php",
 			async: true,
-			data: { action: 'add_item', type: 'army', left: x*60, top: y*60 }
+			data: { action: 'add_item', type: 'army', left: x*60, top: y*60, game_id: game_id_url }
 		});	
 		
 		checkcollision();
@@ -509,13 +545,7 @@ function morecode() {
 		
 		var x=Math.floor((Math.random() * 10));
 		var y=Math.floor((Math.random() * 10));
-		var newboss = document.createElement('div');
-		$(newboss).addClass("boss");
-		$(newboss).addClass("objet");
-		$(newboss).attr("name", "boss");
-		$(newboss).css("left", tableleft+x*60 );
-		$(newboss).css("top", tabletop+y*60 );
-		$(newboss).appendTo($("#content"));
+		
 		while(!is_empty(tableleft+x*60,tabletop+y*60)) {
 		
 			x=Math.floor((Math.random() * 10));
@@ -978,9 +1008,11 @@ function loopmulti(game_id) {
 		var objetname = $(objets[i]).attr("name");
 		var objetleft = parseFloat($(objets[i]).css("left"))-tableleft;
 		var objettop = parseFloat($(objets[i]).css("top"))-100;
+			
 		
+		//console.log(objetname+"|"+objetleft+"|"+objettop+"|||");
+		objetlist+=objetname+"|"+objetleft+"|"+objettop+"|||";		
 		
-		objetlist+=objetname+"|"+objetleft+"|"+objettop+"|||";
 		
 	}
 	
@@ -993,7 +1025,6 @@ function loopmulti(game_id) {
 	else if ($(".player2").length) {
 		var playerleft = parseFloat($(".player2").css("left"))-tableleft;
 		var playertop = parseFloat($(".player2").css("top"))-100;
-		console.log("marche "+playerleft);
 		objetlist+="player2|"+playerleft+"|"+playertop+"|||";
 	}
 	
@@ -1002,18 +1033,18 @@ function loopmulti(game_id) {
 	//appel ajax avec liste des objets existant, retourne ce qui a faire
 	//ex: cops|100|200|delete
 	// code|100|200|new
-	console.log("fsdfsdfsdfsdf "+game_id);
 	$.ajax({
 		type: "POST",
 		url: "ajax_multi.php",
 		data: {action:"refresh_screen", objetlist: objetlist, game_id: game_id},
 		async: false,
 		complete: function(response){
-			console.log(response.responseText);
+			//console.log(response.responseText);
 			//gere les 2 actions pour mettre à jour la grille
 			var tab = response.responseText.split("|||");
 			for(i=0;i<tab.length;i++) {
 				var tab2 = tab[i].split("|");
+				console.log(tab2);
 				if(tab2[3]=="new") {
 					var newobjet = document.createElement('div');
 					$(newobjet).addClass(tab2[0]);
@@ -1024,7 +1055,7 @@ function loopmulti(game_id) {
 					$(newobjet).appendTo($("#content"));
 				}
 				else if(tab2[3]=="delete") {
-					console.log("Delete element "+tab2[0]);
+					//console.log("Delete element "+tab2[0]);
 					var objets = $('[name="'+tab2[0]+'"]');
 					for(var j=0;j<objets.length;j++) {
 						

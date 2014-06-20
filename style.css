@@ -41,6 +41,15 @@ body {
 }
 
 
+.player1 {
+	background:url("player_2.png") ;
+	background-size:60px auto;
+	width:60px;
+	height:60px;
+	position:absolute;
+	top: 100px;
+}
+
 .player2 {
 	background:url("player_2.png") ;
 	background-size:60px auto;

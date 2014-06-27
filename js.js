@@ -45,7 +45,6 @@ function move_player(largeur,hauteur,e) {
 		//alert("locked");
 		return 0;
 	}
-	console.log("dessous");
 	
 	var moved = 0;
 
@@ -1149,9 +1148,6 @@ function loopmulti(game_id) {
 					else {
 						$(newobjet).appendTo($("#content"));
 					}
-					if(tab2[0]=="boss") {
-						console.log("new boss "+tab2[1]+"/"+tab2[2]);
-					}
 				}
 				else if(tab2[3]=="delete") {
 					//console.log("Delete element "+tab2[0]);
@@ -1162,9 +1158,7 @@ function loopmulti(game_id) {
 						var top = parseFloat($(objets[j]).css("top"))-100;
 						
 						if(left==parseFloat(tab2[1]) && top==parseFloat(tab2[2])) {
-							if(tab2[0]=="boss") {
-								console.log("delete boss "+tab2[1]+"/"+tab2[2]);
-							}
+		
 							$(objets[j]).remove();
 							break;
 						}

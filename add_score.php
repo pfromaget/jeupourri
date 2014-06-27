@@ -7,6 +7,9 @@ if(isset($_POST['player'])) {
 			mysql_select_db($db_database);
 			mysql_query("INSERT INTO score (player,score,log_date)
 			VALUES ('".addslashes($_POST['player'])."','".addslashes($_POST['score'])."',NOW())");
+			if($_COOKIE['game_id']) {
+				mysql_query("UPDATE games SET status=2 WHERE auto_id='".(int)$_COOKIE['game_id']."'");
+			}
 		}
 	}
 }

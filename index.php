@@ -18,7 +18,7 @@ $hauteur = 10;
 		<script type="text/javascript" src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
 		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquerymobile/1.4.2/jquery.mobile.js"></script>
 	</head>
-	<body onkeydown="move_player(<?=$largeur?>,<?=$hauteur?>,event);event.preventDefault();" onload="ask_pseudo(false);loop(<?=$_GET['game_id']?>);loopmulti(<?=$_GET['game_id']?>);"  onclick="remove_regles();">
+	<body onkeydown="event.preventDefault();" onkeyup="move_player(<?=$largeur?>,<?=$hauteur?>,event);" onload="ask_pseudo(false);loop(<?=$_GET['game_id']?>);loopmulti(<?=$_GET['game_id']?>);"  onclick="remove_regles();">
 	<div id="content">
 	<?php
 

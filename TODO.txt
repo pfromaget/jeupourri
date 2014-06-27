@@ -1,1 +1,1 @@
-- bug avec flics (disparition, déplacemnet bizarre)
+- plusieurs boss / flics

@@ -26,8 +26,26 @@ function getQueryVariable(variable) {
 }
 
 var game_id_url = getQueryVariable("game_id");
+var win_url = getQueryVariable("win");
 
 function move_player(largeur,hauteur,e) {
+	
+	var locked = false;
+	$.ajax({
+		type: "POST",
+		url: "ajax_multi.php",
+		cache: false,
+		async: false,
+		data: { action: 'get_lock' },
+		complete: function(response){
+			if(response.responseText=="locked") { locked=true;}
+		}
+	});	
+	if(locked) {
+		//alert("locked");
+		return 0;
+	}
+	console.log("dessous");
 	
 	var moved = 0;
 
@@ -48,7 +66,17 @@ function move_player(largeur,hauteur,e) {
 		//très alcoolisé
 		if(parseFloat(sessionStorage.getItem("alcool"))>5) {
 			var rand = Math.floor(Math.random()*10)+1;
-			if(rand==5 || rand==7) return 0; //rien
+			if(rand==5 || rand==7) {
+				$.ajax({
+					type: "POST",
+					url: "ajax_multi.php",
+					async: false,
+					data: { action: 'release_lock' },
+					complete: function(response){
+					}
+				});
+				return 0; //rien
+			}
 			else if(rand<5) { //deplacement aleatoire 5 fois sur 10
 				key = rand+37;
 			}
@@ -57,7 +85,17 @@ function move_player(largeur,hauteur,e) {
 		//alcoolisé
 		else if(parseFloat(sessionStorage.getItem("alcool"))>3) {
 			var rand = Math.floor(Math.random()*10)+1;
-			if(rand==5) return 0; //rien
+			if(rand==5) {
+				$.ajax({
+					type: "POST",
+					url: "ajax_multi.php",
+					async: false,
+					data: { action: 'release_lock' },
+					complete: function(response){
+					}
+				});
+				return 0; //rien
+			}
 			else if(rand<2) { //deplacement aleatoire 2 fois sur 10
 				key = rand+37;
 			}
@@ -150,6 +188,17 @@ function move_player(largeur,hauteur,e) {
 		move_army();
 		checkcollision();
 	}
+	
+	$.ajax({
+		type: "POST",
+		url: "ajax_multi.php",
+		async: false,
+		data: { action: 'release_lock' },
+		complete: function(response){
+		}
+	});
+	
+		
 }
 
 function changeface() {
@@ -304,6 +353,7 @@ function move_cops() {
 
 function move_army() {
 	//les flics bougent en ligne droite
+	var tableleft = $('#grid').offset().left;
 	var army = $('[name="army"]');
 	if(army.length>0) {		
 		for(i=0;i<army.length;i++) {
@@ -326,6 +376,19 @@ function move_army() {
 				sessionStorage.setItem("army_direction",Math.abs(parseFloat(sessionStorage.getItem("army_direction"))-1));
 				//$(cops[i]).css("left",copsleft+60);				
 			}
+			
+			$.ajax({
+				type: "POST",
+				url: "ajax_multi.php",
+				async: true,
+				data: { action: 'del_item', type: 'army', left: parseFloat(armyleft-tableleft), top: parseFloat(armytop-100), game_id: game_id_url }
+			});	
+			$.ajax({
+				type: "POST",
+				url: "ajax_multi.php",
+				async: true,
+				data: { action: 'add_item', type: 'army', left: parseFloat($(army[i]).css("left"))-tableleft, top: parseFloat($(army[i]).css("top"))-100, game_id: game_id_url }
+			});
 		}
 	}
 	
@@ -439,6 +502,7 @@ function moreboss() {
 		$(newboss).css("top", tabletop+y*60 );
 		$(newboss).appendTo($("#content"));
 		
+		
 		//ajout en bdd
 		$.ajax({
 			type: "POST",
@@ -497,7 +561,7 @@ function morecops() {
 function morearmy() {
 	
 	var army = $('[name="army"]');
-	if(army.length==0 && parseFloat(sessionStorage.getItem("alcool"))>3 && decrypt(sessionStorage.getItem("score"))>200
+	if(army.length==0 && parseFloat(sessionStorage.getItem("alcool"))>3 && decrypt(sessionStorage.getItem("score"))>2
 	&& Math.floor((Math.random() * 29))==1 ) {
 		var tabletop = 100;
 		var tableleft = $('#grid').offset().left;
@@ -621,12 +685,12 @@ function morecoffee() {
 
 function moretoilet() {
 	
-	if(parseFloat(sessionStorage.getItem("alcool"))>2) {
+	if(parseFloat(sessionStorage.getItem("alcool"))>3) {
 		
 		var toilets = $('[name="wc"]');
 		if(toilets.length==0) {
 		
-			if(Math.floor((Math.random() * 30))==1) {
+			if(Math.floor(Math.random() * 29)==1) {
 				
 				var tabletop = 100;
 				var tableleft = $('#grid').offset().left;
@@ -647,7 +711,7 @@ function moretoilet() {
 				$(toilet).css("left", tableleft+x*60 );
 				$(toilet).css("top", tabletop+y*60 );
 				$(toilet).appendTo($("#content"));
-				sessionStorage.setItem("toilet_countdown",10); //duree de vie de la case toilettes
+				sessionStorage.setItem("toilet_countdown",20); //duree de vie de la case toilettes
 				
 				
 				//ajout en bdd
@@ -655,7 +719,7 @@ function moretoilet() {
 					type: "POST",
 					url: "ajax_multi.php",
 					async: true,
-					data: { action: 'add_item', type: 'toilet', left: x*60, top: y*60 }
+					data: { action: 'add_item', type: 'wc', left: x*60, top: y*60, game_id:game_id_url }
 				});	
 				
 				
@@ -672,6 +736,16 @@ function moretoilet() {
 			else {//duree de vie epuisée, on delete
 				for(i=0;i<toilets.length;i++) {
 					$(toilets[i]).remove();
+					//suppr en bdd
+					var tableleft = $('#grid').offset().left;
+					var wcleft = parseFloat($(toilets[i]).css("left"))-tableleft;
+					var wctop = parseFloat($(toilets[i]).css("top"))-100;
+					$.ajax({
+						type: "POST",
+						url: "ajax_multi.php",
+						async: true,
+						data: { action: 'del_item', type: 'wc', left: wcleft, top: wctop, game_id:game_id_url }
+					});	
 				}
 			}
 		}
@@ -772,7 +846,7 @@ function checkcollision() {
 				type: "POST",
 				url: "ajax_multi.php",
 				async: true,
-				data: { action: 'del_item', type: 'toilet', left: wcleft-tableleft, top: wctop-tabletop }
+				data: { action: 'del_item', type: 'wc', left: wcleft-tableleft, top: wctop-tabletop }
 			});	
 		}
 	}
@@ -872,14 +946,13 @@ function checkcollision() {
 			});	
 			if(parseFloat(sessionStorage.getItem("alcool"))>3) {
 				$('#player').remove();
-				alert("Vous avez perdu !");
 				$.ajax({
 				  type: "POST",
 				  url: "add_score.php",
 				  async: false,
 				  data: { player: getCookie("player"), score: decrypt(sessionStorage.getItem("score")) }
 				});				
-				window.location.href='index.php';
+				window.location.href='index.php?win=0';
 			}
 		}
 	}
@@ -901,14 +974,13 @@ function checkcollision() {
 			});	
 			if(parseFloat(sessionStorage.getItem("alcool"))>3) {
 				$('#player').remove();
-				alert("Vous avez perdu !");
 				$.ajax({
 				  type: "POST",
 				  url: "add_score.php",
 				  async: false,
 				  data: { player: getCookie("player"), score: decrypt(sessionStorage.getItem("score")) }
 				});
-				window.location.href='index.php';
+				window.location.href='index.php?win=0';
 			}
 		}
 	}
@@ -981,12 +1053,19 @@ function loop(game_id) {
 		
 		if(game_id) {
 			setCookie("game_id", game_id, 1);
-			$("#regles").hide();
+			$("#regles").remove();
 			init_player(2);
 		}
 		else {
 			init_player(1);			
 		}
+	}
+	
+	if(win_url==1) {
+		$("#regles").html("<img src='http://bbsimg.ngfiles.com/1/24409000/ngbbs50e4c4e6e051d.jpg' width='600px'>");
+	}
+	else if(win_url==0) {
+		$("#regles").html("<img src='http://m.img.brothersoft.com/iphone/1801/369493801_screen2360x480.png' width='600px'>");
 	}
 	
 	morejokes();
@@ -996,8 +1075,7 @@ function loop(game_id) {
 	setTimeout(function(){loop()},20000);
 }
 
-function loopmulti(game_id) {
-	
+function loopmulti(game_id) {	
 	
 	var tableleft = $('#grid').offset().left;
 	//recupere les objets en place	
@@ -1039,20 +1117,41 @@ function loopmulti(game_id) {
 		data: {action:"refresh_screen", objetlist: objetlist, game_id: game_id},
 		async: false,
 		complete: function(response){
-			//console.log(response.responseText);
+			if(response.responseText=="END") {
+				$.ajax({
+				  type: "POST",
+				  url: "add_score.php",
+				  async: false,
+				  data: { player: getCookie("player"), score: decrypt(sessionStorage.getItem("score")) }
+				});
+				window.location.href='index.php?win=1';
+			}
+			
+			
 			//gere les 2 actions pour mettre à jour la grille
 			var tab = response.responseText.split("|||");
 			for(i=0;i<tab.length;i++) {
 				var tab2 = tab[i].split("|");
-				console.log(tab2);
-				if(tab2[3]=="new") {
+				//console.log(tab2);
+				if(tab2[3]=="new") {					
 					var newobjet = document.createElement('div');
 					$(newobjet).addClass(tab2[0]);
 					$(newobjet).addClass("objet");
 					$(newobjet).attr("name", tab2[0]);
 					$(newobjet).css("left", tableleft+parseFloat(tab2[1]) );
 					$(newobjet).css("top", 100+parseFloat(tab2[2]) );
-					$(newobjet).appendTo($("#content"));
+					if( (tab2[0]=="boss" && $('.boss').length>0)
+					|| (tab2[0]=="cops" && $('.cops').length>0)
+					|| (tab2[0]=="army" && $('.army').length>0)
+					|| (tab2[0]=="beer" && $('.beer').length>0)) {
+						//rien
+					}
+					else {
+						$(newobjet).appendTo($("#content"));
+					}
+					if(tab2[0]=="boss") {
+						console.log("new boss "+tab2[1]+"/"+tab2[2]);
+					}
 				}
 				else if(tab2[3]=="delete") {
 					//console.log("Delete element "+tab2[0]);
@@ -1063,6 +1162,9 @@ function loopmulti(game_id) {
 						var top = parseFloat($(objets[j]).css("top"))-100;
 						
 						if(left==parseFloat(tab2[1]) && top==parseFloat(tab2[2])) {
+							if(tab2[0]=="boss") {
+								console.log("delete boss "+tab2[1]+"/"+tab2[2]);
+							}
 							$(objets[j]).remove();
 							break;
 						}
@@ -1075,10 +1177,7 @@ function loopmulti(game_id) {
 	
 	
 	
-	
-	
-	
-	setTimeout(function(){loopmulti(game_id)},500);
+	setTimeout(function(){loopmulti(game_id)},200);
 }
 
 
@@ -1086,8 +1185,8 @@ function loopmulti(game_id) {
 var done = 0;
 function loopBeer() {
 	if(done==1) {
-		$(".beer").css("background",'url("green_beer.png")');
-		sessionStorage.setItem("beer_green",1);
+		/*$(".beer").css("background",'url("green_beer.png")');
+		sessionStorage.setItem("beer_green",1);*/
 	}	
 	done = 1;
 	if(decrypt(sessionStorage.getItem("score"))>200) {
@@ -1321,14 +1420,13 @@ function check_blocked() {
 		
 		if(is_blocked(left,top)) {
 			$('#player').remove();
-			alert("Vous avez perdu !");
 			$.ajax({
 			  type: "POST",
 			  url: "add_score.php",
 			  async: false,
 			  data: { player: getCookie("player"), score: decrypt(sessionStorage.getItem("score")) }
 			});
-			window.location.href='index.php';
+			window.location.href='index.php?win=0';
 		}
 		
 		//position biere

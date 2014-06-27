@@ -54,7 +54,29 @@ if(file_exists("configure.php")) {
 					echo '</ul>';
 				}
 				break;
+			case 'get_lock':
+				$query = mysql_query("INSERT IGNORE INTO locks (game_id,log_date) VALUES ('".(int)$_COOKIE['game_id']."',NOW())") or die("erreur");
+				$id = mysql_insert_id();
+				if($id) {
+					echo "ok";
+				}
+				else {
+					echo "locked";
+				}
+				break;
+			case 'release_lock':
+				mysql_query("DELETE FROM locks WHERE game_id='".(int)$_COOKIE['game_id']."'") or die("erreur");
+				echo "DELETE FROM locks WHERE game_id='".(int)$_COOKIE['game_id']."'";
+				break;
 			case 'refresh_screen':
+				$query = mysql_query("SELECT status FROM games WHERE auto_id='".(int)$_COOKIE['game_id']."' AND status=2");
+				if(mysql_num_rows($query)) {
+					echo "END";
+					die();
+				}
+			
+			
+				
 				$objetlist = explode("|||",$_POST['objetlist']);
 				$objettab = array();
 				foreach($objetlist as $key=>$objet) {
@@ -88,7 +110,7 @@ if(file_exists("configure.php")) {
 		
 							||
 							
-							(($array['element']!="cops" && $array['element']!="army" && $array['element']!="boss")
+							(($array['element']!="cops" && $array['element']!="army" && $array['element']!="boss" && $array['element']!="wc")
 							&& $_POST['game_id'])
 							
 							) {
@@ -107,18 +129,19 @@ if(file_exists("configure.php")) {
 				}
 				
 				//tout ce qu'il reste dans le tableau passé en post doit etre supprimé
+				$return_delete = "";
 				foreach($objettab as $left=>$value) {
 					
 					foreach($value as $top=>$element) {
 						
-						$return.=$element."|".$left."|".$top."|delete|||";
+						$return_delete.=$element."|".$left."|".$top."|delete|||";
 						
 					}
 					
 					
 				}
 				
-				echo $return;
+				echo $return_delete.$return;
 				
 		
 				

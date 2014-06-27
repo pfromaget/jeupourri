@@ -45,7 +45,7 @@ if(file_exists("configure.php")) {
 				break;
 			case 'list_games':
 				//parties en attente
-				$query = mysql_query("SELECT * FROM games WHERE status=0 AND log_date>=SUBDATE(NOW(),INTERVAL 1 HOUR)");
+				$query = mysql_query("SELECT * FROM games WHERE status=0 AND log_date>=SUBDATE(NOW(),INTERVAL 5 MINUTE) AND created_by!='".(int)$_COOKIE['player']."'");
 				if(mysql_num_rows($query)) {
 					echo '<h3>Liste des parties en cours :</h3><ul>';
 					while($array = mysql_fetch_array($query)) {

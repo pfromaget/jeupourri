@@ -561,7 +561,7 @@ function morearmy() {
 	
 	var army = $('[name="army"]');
 	if(army.length==0 && parseFloat(sessionStorage.getItem("alcool"))>3 && decrypt(sessionStorage.getItem("score"))>2
-	&& Math.floor((Math.random() * 29))==1 ) {
+	&& Math.floor((Math.random() * 49))==1 ) {
 		var tabletop = 100;
 		var tableleft = $('#grid').offset().left;
 		
